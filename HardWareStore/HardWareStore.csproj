@@ -117,10 +117,17 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\InventoryResponse.cs" />
     <Compile Include="Models\Products.cs" />
     <Compile Include="Models\Variants.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\InventoryMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\InventoryMain.Designer.cs">
+      <DependentUpon>InventoryMain.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ProductsMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +166,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DL\InventoryDl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

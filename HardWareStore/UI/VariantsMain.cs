@@ -136,62 +136,16 @@ namespace HardWareStore.UI
             if (grid.Columns.Contains("is_active")) grid.Columns["is_active"].HeaderText = "Active";
         }
 
-        private async void btnAdd_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            string size = txtSize.Text.Trim();
-            string classType = txtClassType.Text.Trim();
-            string unit = cmbUnitOfMeasure.Text;
-            decimal pricePerUnit = numPricePerUnit.Value;
-            decimal pricePerLength = numPricePerLength.Value;
-            decimal lengthInFeet = numLengthInFeet.Value;
-            decimal stock = numStock.Value;
-            decimal reorderLevel = numReorderLevel.Value;
-            decimal minOrderQty = numMinOrderQty.Value;
+            // Clear fields and show panel for new variant entry
+            ClearFields();
+            panelEdit.Visible = true;
+            UIHelper.RoundPanelCorners(panelEdit, 20);
 
-            if (string.IsNullOrWhiteSpace(size) || string.IsNullOrWhiteSpace(unit) || pricePerUnit <= 0)
-            {
-                MessageBox.Show("Please fill all required fields (Size, Unit, Price per Unit).",
-                    "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                var variant = new Variants
-                {
-                    product_id = _productId,
-                    size = size,
-                    class_type = string.IsNullOrWhiteSpace(classType) ? null : classType,
-                    unit_of_measure = unit,
-                    price_per_unit = pricePerUnit,
-                    price_per_lenght = pricePerLength,
-                    lenght_in_feet = lengthInFeet,
-                    quantity_in_stock = stock,
-                    reorder_level = reorderLevel,
-                    minimum_order_quantity = minOrderQty,
-                    is_active = true
-                };
-
-                bool success = await _variantsDL.AddVariant(variant);
-
-                if (success)
-                {
-                    MessageBox.Show("Variant added successfully!", "Success",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadVariants();
-                    ClearFields();
-                }
-                else
-                {
-                    MessageBox.Show("Failed to add variant.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error adding variant: " + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Change panel title for "Add" mode
+            label3.Text = "Add New Variant";
+            btnUpdate.Text = "Save";
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -218,18 +172,15 @@ namespace HardWareStore.UI
 
                 panelEdit.Visible = true;
                 UIHelper.RoundPanelCorners(panelEdit, 20);
+
+                // Change panel title for "Edit" mode
+                label3.Text = "Edit Variant / Size";
+                btnUpdate.Text = "Update";
             }
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (_selectedId == -1)
-            {
-                MessageBox.Show("No variant selected.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             string size = txtSize.Text.Trim();
             string classType = txtClassType.Text.Trim();
             string unit = cmbUnitOfMeasure.Text;
@@ -249,27 +200,56 @@ namespace HardWareStore.UI
 
             try
             {
-                var variant = new Variants
-                {
-                    variant_id = _selectedId,
-                    product_id = _productId,
-                    size = size,
-                    class_type = string.IsNullOrWhiteSpace(classType) ? null : classType,
-                    unit_of_measure = unit,
-                    price_per_unit = pricePerUnit,
-                    price_per_lenght = pricePerLength,
-                    lenght_in_feet = lengthInFeet,
-                    quantity_in_stock = stock,
-                    reorder_level = reorderLevel,
-                    minimum_order_quantity = minOrderQty,
-                    is_active = chkIsActive.Checked
-                };
+                bool success;
+                string successMessage;
 
-                bool success = await _variantsDL.UpdateVariant(variant);
+                if (_selectedId == -1)
+                {
+                    // ADD mode
+                    var variant = new Variants
+                    {
+                        product_id = _productId,
+                        size = size,
+                        class_type = string.IsNullOrWhiteSpace(classType) ? null : classType,
+                        unit_of_measure = unit,
+                        price_per_unit = pricePerUnit,
+                        price_per_lenght = pricePerLength,
+                        lenght_in_feet = lengthInFeet,
+                        quantity_in_stock = stock,
+                        reorder_level = reorderLevel,
+                        minimum_order_quantity = minOrderQty,
+                        is_active = true
+                    };
+
+                    success = await _variantsDL.AddVariant(variant);
+                    successMessage = "Variant added successfully!";
+                }
+                else
+                {
+                    // UPDATE mode
+                    var variant = new Variants
+                    {
+                        variant_id = _selectedId,
+                        product_id = _productId,
+                        size = size,
+                        class_type = string.IsNullOrWhiteSpace(classType) ? null : classType,
+                        unit_of_measure = unit,
+                        price_per_unit = pricePerUnit,
+                        price_per_lenght = pricePerLength,
+                        lenght_in_feet = lengthInFeet,
+                        quantity_in_stock = stock,
+                        reorder_level = reorderLevel,
+                        minimum_order_quantity = minOrderQty,
+                        is_active = chkIsActive.Checked
+                    };
+
+                    success = await _variantsDL.UpdateVariant(variant);
+                    successMessage = "Variant updated successfully!";
+                }
 
                 if (success)
                 {
-                    MessageBox.Show("Variant updated successfully!", "Success",
+                    MessageBox.Show(successMessage, "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadVariants();
                     panelEdit.Visible = false;
@@ -277,13 +257,13 @@ namespace HardWareStore.UI
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update variant.", "Error",
+                    MessageBox.Show("Failed to save variant.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error updating variant: " + ex.Message, "Error",
+                MessageBox.Show("Error saving variant: " + ex.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
