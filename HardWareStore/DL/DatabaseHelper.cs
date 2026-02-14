@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Windows.Input;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace KIMS
+namespace HardWareStore.DL
 {
     public sealed class DatabaseHelper
     {
@@ -113,17 +110,19 @@ namespace KIMS
             }
         }
 
-        public int GetCategoryId(string name)
+        // Get lookup ID by type and value
+        public int GetLookupId(string type, string value)
         {
             try
             {
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT category_id FROM categories WHERE name = @name;";
+                    string query = "SELECT lookup_id FROM lookup WHERE type = @type AND value = @value;";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@name", name);
+                        cmd.Parameters.AddWithValue("@type", type);
+                        cmd.Parameters.AddWithValue("@value", value);
                         object result = cmd.ExecuteScalar();
                         return result != null ? Convert.ToInt32(result) : -1;
                     }
@@ -131,28 +130,37 @@ namespace KIMS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving category ID: " + ex.Message);
+                throw new Exception($"Error retrieving lookup ID for type '{type}' and value '{value}': " + ex.Message);
             }
         }
 
-        public List<string> GetCategories(string keyword)
+        // Get lookup values by type
+        public List<string> GetLookupValues(string type, string keyword = "")
         {
-            List<string> categories = new List<string>();
+            List<string> values = new List<string>();
             try
             {
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT name FROM categories WHERE name LIKE @keyword;";
+                    string query = @"
+                        SELECT value 
+                        FROM lookup 
+                        WHERE type = @type 
+                        AND is_active = TRUE 
+                        AND value LIKE @keyword
+                        ORDER BY display_order, value;";
+
                     using (var cmd = new MySqlCommand(query, conn))
                     {
+                        cmd.Parameters.AddWithValue("@type", type);
                         cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
 
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                categories.Add(reader.GetString("name"));
+                                values.Add(reader.GetString("value"));
                             }
                         }
                     }
@@ -160,12 +168,25 @@ namespace KIMS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving categories: " + ex.Message);
+                throw new Exception($"Error retrieving lookup values for type '{type}': " + ex.Message);
             }
-            return categories;
+            return values;
         }
 
-        public List<string> GetSuppliers(string keyword)
+        // Get category ID by name (backward compatibility)
+        public int GetCategoryId(string name)
+        {
+            return GetLookupId("category", name);
+        }
+
+        // Get categories (updated to use lookup table)
+        public List<string> GetCategories(string keyword = "")
+        {
+            return GetLookupValues("category", keyword);
+        }
+
+        // Get suppliers for searchable combobox
+        public List<string> GetSuppliers(string keyword = "")
         {
             List<string> suppliers = new List<string>();
             try
@@ -173,7 +194,13 @@ namespace KIMS
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT name FROM suppliers WHERE name LIKE @keyword;";
+                    string query = @"
+                        SELECT name 
+                        FROM supplier 
+                        WHERE is_active = TRUE 
+                        AND name LIKE @keyword
+                        ORDER BY name;";
+
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
@@ -194,17 +221,19 @@ namespace KIMS
             }
             return suppliers;
         }
-        internal int getsuppierid(string text)
+
+        // Get supplier ID by name
+        public int GetSupplierId(string name)
         {
             try
             {
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT supplier_id FROM suppliers WHERE name = @name;";
+                    string query = "SELECT supplier_id FROM supplier WHERE name = @name;";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@name", text);
+                        cmd.Parameters.AddWithValue("@name", name);
                         object result = cmd.ExecuteScalar();
                         return result != null ? Convert.ToInt32(result) : -1;
                     }
@@ -212,24 +241,22 @@ namespace KIMS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving category ID: " + ex.Message);
+                throw new Exception("Error retrieving supplier ID: " + ex.Message);
             }
         }
-        internal int getcustid(string fullName)
+
+        // Get customer ID by name
+        public int GetCustomerId(string name)
         {
             try
             {
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = @"
-                SELECT customer_id 
-                FROM customers 
-                WHERE CONCAT(first_name, ' ', last_name) = @fullName;";
-
+                    string query = "SELECT customer_id FROM customer WHERE name = @name;";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@fullName", fullName.Trim());
+                        cmd.Parameters.AddWithValue("@name", name.Trim());
                         object result = cmd.ExecuteScalar();
                         return result != null ? Convert.ToInt32(result) : -1;
                     }
@@ -241,7 +268,43 @@ namespace KIMS
             }
         }
 
-        public List<string> Getproducts(string keyword)
+        // Get all customers for searchable combobox
+        public List<string> GetCustomers(string keyword = "")
+        {
+            var customers = new List<string>();
+            try
+            {
+                using (var conn = GetConnection())
+                {
+                    conn.Open();
+                    string query = @"
+                        SELECT name 
+                        FROM customer 
+                        WHERE is_active = TRUE 
+                        AND name LIKE @keyword
+                        ORDER BY name;";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                                customers.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving customers: " + ex.Message);
+            }
+            return customers;
+        }
+
+        // Get products for searchable combobox
+        public List<string> GetProducts(string keyword = "")
         {
             List<string> products = new List<string>();
             try
@@ -249,7 +312,13 @@ namespace KIMS
                 using (var conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT name FROM products WHERE name LIKE @keyword;";
+                    string query = @"
+                        SELECT name 
+                        FROM products 
+                        WHERE is_active = TRUE 
+                        AND name LIKE @keyword
+                        ORDER BY name;";
+
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
@@ -266,11 +335,13 @@ namespace KIMS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving suppliers: " + ex.Message);
+                throw new Exception("Error retrieving products: " + ex.Message);
             }
             return products;
         }
-        internal int getproductid(string text)
+
+        // Get product ID by name
+        public int GetProductId(string name)
         {
             try
             {
@@ -280,7 +351,7 @@ namespace KIMS
                     string query = "SELECT product_id FROM products WHERE name = @name;";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@name", text);
+                        cmd.Parameters.AddWithValue("@name", name);
                         object result = cmd.ExecuteScalar();
                         return result != null ? Convert.ToInt32(result) : -1;
                     }
@@ -288,76 +359,9 @@ namespace KIMS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving category ID: " + ex.Message);
+                throw new Exception("Error retrieving product ID: " + ex.Message);
             }
         }
-        public List<string> Getbatches(string keyword)
-        {
-            List<string> suppliers = new List<string>();
-            try
-            {
-                using (var conn = GetConnection())
-                {
-                    conn.Open();
-                    string query = "SELECT batch_name FROM batches WHERE batch_name LIKE @keyword;";
-                    using (var cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@keyword", $"%{keyword}%");
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                suppliers.Add(reader.GetString("batch_name"));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving batches: " + ex.Message);
-            }
-            return suppliers;
-        }
-        public List<string> getAllCustomers()
-        {
-            var names = new List<string>();
-            using (var conn = GetConnection())
-            {
-                conn.Open();
-                var cmd = new MySqlCommand("SELECT CONCAT_WS(' ', first_name, last_name) FROM customers", conn);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                        names.Add(reader.GetString(0));
-                }
-            }
-            return names;
-        }
-
-        internal int getbatchid(string text)
-        {
-            try
-            {
-                using (var conn = GetConnection())
-                {
-                    conn.Open();
-                    string query = "SELECT batch_id FROM batches WHERE batch_name = @name;";
-                    using (var cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@name", text);
-                        object result = cmd.ExecuteScalar();
-                        return result != null ? Convert.ToInt32(result) : -1;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving batch ID: " + ex.Message);
-            }
-        }
-   
 
         public DataTable ExecuteDataTable(string query, MySqlParameter[] parameters = null)
         {
@@ -378,10 +382,18 @@ namespace KIMS
             return dt;
         }
 
-
-
-
-
+        public object ExecuteScalar(string query, MySqlParameter[] parameters = null)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    if (parameters != null)
+                        cmd.Parameters.AddRange(parameters);
+                    return cmd.ExecuteScalar();
+                }
+            }
+        }
     }
-
 }
