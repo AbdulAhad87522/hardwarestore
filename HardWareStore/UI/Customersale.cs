@@ -497,7 +497,7 @@ namespace HardWareStore.UI
                         .ToList()
                 };
 
-                string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+                string json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(GetTempSaleFilePath(), json);
             }
             catch (Exception ex)
