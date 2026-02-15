@@ -17,7 +17,7 @@ namespace HardWareStore
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AddPurchaseBatchForm());
+            Application.Run(new Customersale());
         }
     }
 }

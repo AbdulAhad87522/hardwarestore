@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
+using HardWareStore.DL;
+using HardWareStore.Models;
 
 namespace HardWareStore.BL
 {

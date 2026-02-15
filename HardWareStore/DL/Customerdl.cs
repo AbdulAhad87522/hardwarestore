@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HardWareStore.BL;
+using HardWareStore.Models;
 using MySql.Data.MySqlClient;
 
 namespace HardWareStore.DL
@@ -72,5 +73,6 @@ namespace HardWareStore.DL
             }
         }
 
+        
     }
 }

@@ -116,15 +116,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL\Customerbillbl.cs" />
     <Compile Include="BL\CustomerBl.cs" />
+    <Compile Include="BL\internal class CustomerBill_SpecificProductsBL.cs" />
     <Compile Include="BL\Temporarycustomersale.cs" />
+    <Compile Include="DL\BillingRecordsOverviewDL.cs" />
+    <Compile Include="DL\Customerbilldl.cs" />
+    <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
     <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="DL\MySqlBackupHelper.cs" />
     <Compile Include="DL\ProductsDL.cs" />
+    <Compile Include="DL\Purchasebatchdl.cs" />
     <Compile Include="DL\VariantsDl.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\customerbill.cs" />
+    <Compile Include="Models\Customerrecord.cs" />
     <Compile Include="Models\Products.cs" />
+    <Compile Include="Models\PurchaseBatch.cs" />
+    <Compile Include="Models\PurchaseBatchItem.cs" />
     <Compile Include="Models\Variants.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -134,11 +145,29 @@
     <Compile Include="UI\Addcustomer.Designer.cs">
       <DependentUpon>Addcustomer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Addpurchasebatchform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Addpurchasebatchform.Designer.cs">
+      <DependentUpon>Addpurchasebatchform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CustomerBill_SpecificProducts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CustomerBill_SpecificProducts.Designer.cs">
+      <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Customersale.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Customersale.Designer.cs">
       <DependentUpon>Customersale.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\customer_bills.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customer_bills.Designer.cs">
+      <DependentUpon>customer_bills.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ProductsMain.cs">
       <SubType>Form</SubType>
@@ -162,6 +191,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\Addpurchasebatchform.resx">
+      <DependentUpon>Addpurchasebatchform.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

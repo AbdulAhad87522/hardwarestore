@@ -526,7 +526,7 @@ namespace HardWareStore.UI
                 decimal totalPrice = decimal.TryParse(txtTotalAmount.Text, out var tp) ? tp : 0;
                 decimal paid = decimal.TryParse(txtPaid.Text, out var p) ? p : 0;
 
-                var batch = new PurchaseBatch
+                var batch = new     PurchaseBatch
                 {
                     batch_id = _currentBatchId,
                     supplier_id = supplierId,
