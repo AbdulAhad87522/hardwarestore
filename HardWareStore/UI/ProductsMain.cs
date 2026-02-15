@@ -154,67 +154,16 @@ namespace HardWareStore.UI
             if (grid.Columns.Contains("is_active")) grid.Columns["is_active"].HeaderText = "Active";
         }
 
-        private async void btnAdd_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            string name = txtName.Text.Trim();
-            string categoryName = cmbCategory.Text.Trim();
-            string supplierName = cmbSupplier.Text.Trim();
-            string description = txtDescription.Text.Trim();
+            // Clear fields and show panel for new product entry
+            ClearFields();
+            panelEdit.Visible = true;
+            UIHelper.RoundPanelCorners(panelEdit, 20);
 
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(categoryName))
-            {
-                MessageBox.Show("Please fill all required fields (Product Name and Category).",
-                    "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                int categoryId = await _productsDL.GetCategoryIdByName(categoryName);
-                int supplierId = 0;
-
-                if (!string.IsNullOrWhiteSpace(supplierName))
-                {
-                    supplierId = await _productsDL.GetSupplierIdByName(supplierName);
-                }
-
-                if (categoryId == -1)
-                {
-                    MessageBox.Show("Invalid category selected.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                var product = new Products
-                {
-                    Name = name,
-                    category_id = categoryId,
-                    supplier_id = supplierId,
-                    description = description,
-                    has_variants = chkHasVariants.Checked,
-                    is_active = true
-                };
-
-                bool success = await _productsDL.AddProduct(product);
-
-                if (success)
-                {
-                    MessageBox.Show("Product added successfully!", "Success",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadProducts();
-                    ClearFields();
-                }
-                else
-                {
-                    MessageBox.Show("Failed to add product.", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error adding product: " + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Change panel title for "Add" mode
+            label3.Text = "Add New Product";
+            btnUpdate.Text = "Save";
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -240,18 +189,15 @@ namespace HardWareStore.UI
 
                 panelEdit.Visible = true;
                 UIHelper.RoundPanelCorners(panelEdit, 20);
+
+                // Change panel title for "Edit" mode
+                label3.Text = "Edit Product";
+                btnUpdate.Text = "Update";
             }
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (_selectedId == -1)
-            {
-                MessageBox.Show("No product selected.", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             string name = txtName.Text.Trim();
             string categoryName = cmbCategory.Text.Trim();
             string supplierName = cmbSupplier.Text.Trim();
@@ -281,22 +227,46 @@ namespace HardWareStore.UI
                     return;
                 }
 
-                var product = new Products
-                {
-                    product_id = _selectedId,
-                    Name = name,
-                    category_id = categoryId,
-                    supplier_id = supplierId,
-                    description = description,
-                    has_variants = chkHasVariants.Checked,
-                    is_active = chkIsActive.Checked
-                };
+                bool success;
+                string successMessage;
 
-                bool success = await _productsDL.UpdateProduct(product);
+                if (_selectedId == -1)
+                {
+                    // ADD mode
+                    var product = new Products
+                    {
+                        Name = name,
+                        category_id = categoryId,
+                        supplier_id = supplierId,
+                        description = description,
+                        has_variants = chkHasVariants.Checked,
+                        is_active = true
+                    };
+
+                    success = await _productsDL.AddProduct(product);
+                    successMessage = "Product added successfully!";
+                }
+                else
+                {
+                    // UPDATE mode
+                    var product = new Products
+                    {
+                        product_id = _selectedId,
+                        Name = name,
+                        category_id = categoryId,
+                        supplier_id = supplierId,
+                        description = description,
+                        has_variants = chkHasVariants.Checked,
+                        is_active = chkIsActive.Checked
+                    };
+
+                    success = await _productsDL.UpdateProduct(product);
+                    successMessage = "Product updated successfully!";
+                }
 
                 if (success)
                 {
-                    MessageBox.Show("Product updated successfully!", "Success",
+                    MessageBox.Show(successMessage, "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadProducts();
                     panelEdit.Visible = false;
@@ -304,13 +274,13 @@ namespace HardWareStore.UI
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update product.", "Error",
+                    MessageBox.Show("Failed to save product.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error updating product: " + ex.Message, "Error",
+                MessageBox.Show("Error saving product: " + ex.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
