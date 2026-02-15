@@ -210,5 +210,29 @@ namespace HardWareStore.UI
             public int topHeight;
             public int bottomHeight;
         }
+        public  static  void CustomizeGrid(DataGridView datagridview)
+        {
+            var grid = datagridview;
+            grid.BorderStyle = BorderStyle.None;
+            grid.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(238, 239, 249);
+            grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            grid.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.SeaGreen;
+            grid.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
+            grid.BackgroundColor = System.Drawing.Color.White;
+
+            grid.EnableHeadersVisualStyles = false;
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(20, 25, 72);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold);
+
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            grid.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10);
+            grid.RowTemplate.Height = 35;
+            grid.AllowUserToAddRows = false;
+            grid.ReadOnly = true;
+
+
+        }
     }
 }

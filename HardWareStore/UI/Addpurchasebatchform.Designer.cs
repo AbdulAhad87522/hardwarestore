@@ -706,6 +706,7 @@
             this.Name = "AddPurchaseBatchForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Purchase Batch";
+            this.Load += new System.EventHandler(this.AddPurchaseBatchForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

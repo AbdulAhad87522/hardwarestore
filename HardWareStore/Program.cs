@@ -1,4 +1,8 @@
-﻿using HardWareStore.UI;
+﻿using HardWareStore.DL;
+using HardWareStore.Interfaces;
+using HardWareStore.UI;
+using MedicineShop;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +13,8 @@ namespace HardWareStore
 {
     internal static class Program
     {
+        public static IServiceProvider ServiceProvider { get; private set; }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,7 +23,29 @@ namespace HardWareStore
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AddPurchaseBatchForm());
+
+            var services = new ServiceCollection();
+            configureServices(services);
+            ServiceProvider = services.BuildServiceProvider();
+
+            
+            var mainForm = ServiceProvider.GetRequiredService<Dashboard>();
+            Application.Run(mainForm);
+        }
+        private static void configureServices(ServiceCollection services)
+        {
+            services.AddScoped<IPurchaseBatchDL, PurchaseBatchDL>();
+            services.AddScoped<IProductsDL, ProductsDL>();
+            services.AddScoped<IVariantsDL, VariantsDL>();
+            services.AddScoped<IInventoryDL, InventoryDL>();
+            services.AddTransient<Dashboard>();
+            services.AddTransient<InventoryMain>();
+            services.AddTransient<ProductsMain>();
+            services.AddTransient<VariantsMain>();
+            services.AddTransient<AddPurchaseBatchForm>();
+            services.AddTransient<SupplierBillDetailsForm>();
+            services.AddTransient<SupplierBillsForm>();
+
         }
     }
 }

@@ -114,6 +114,11 @@
     <Compile Include="BL\Temporarycustomersale.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="DL\Supplierpaymentdl.cs" />
+    <Compile Include="Interfaces\IVariantsDL.cs" />
+    <Compile Include="Interfaces\IPurchaseBatchDL.cs" />
+    <Compile Include="Interfaces\IProductsDL.cs" />
+    <Compile Include="Interfaces\IInventoryDL.cs" />
     <Compile Include="DL\ProductsDL.cs" />
     <Compile Include="DL\Purchasebatchdl.cs" />
     <Compile Include="DL\VariantsDl.cs" />
@@ -121,6 +126,7 @@
     <Compile Include="Models\Products.cs" />
     <Compile Include="Models\PurchaseBatch.cs" />
     <Compile Include="Models\PurchaseBatchItem.cs" />
+    <Compile Include="Models\SupplierPaymentRecord.cs" />
     <Compile Include="Models\Variants.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -130,9 +136,21 @@
     <Compile Include="UI\Addpurchasebatchform.Designer.cs">
       <DependentUpon>Addpurchasebatchform.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\BatchItemsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BatchItemsForm.Designer.cs">
+      <DependentUpon>BatchItemsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Customersale.cs" />
     <Compile Include="UI\Customersale.Designer.cs">
       <DependentUpon>Customersale.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Dashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Dashboard.Designer.cs">
+      <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\InventoryMain.cs">
       <SubType>Form</SubType>
@@ -145,6 +163,24 @@
     </Compile>
     <Compile Include="UI\ProductsMain.Designer.cs">
       <DependentUpon>ProductsMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Purchasebatchmanagementform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Purchasebatchmanagementform.Designer.cs">
+      <DependentUpon>Purchasebatchmanagementform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Supplierbilldetailsform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Supplierbilldetailsform.Designer.cs">
+      <DependentUpon>Supplierbilldetailsform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\supplierbillsform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\supplierbillsform.Designer.cs">
+      <DependentUpon>supplierbillsform.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\UIHelper.cs" />
     <Compile Include="UI\VariantsMain.cs">
@@ -165,6 +201,27 @@
     <EmbeddedResource Include="UI\Addpurchasebatchform.resx">
       <DependentUpon>Addpurchasebatchform.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\BatchItemsForm.resx">
+      <DependentUpon>BatchItemsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Dashboard.resx">
+      <DependentUpon>Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\InventoryMain.resx">
+      <DependentUpon>InventoryMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ProductsMain.resx">
+      <DependentUpon>ProductsMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Purchasebatchmanagementform.resx">
+      <DependentUpon>Purchasebatchmanagementform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Supplierbilldetailsform.resx">
+      <DependentUpon>Supplierbilldetailsform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\supplierbillsform.resx">
+      <DependentUpon>supplierbillsform.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -179,9 +236,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="DL\InventoryDl.cs" />
   </ItemGroup>
