@@ -1,7 +1,7 @@
 ﻿using HardWareStore.DL;
 using HardWareStore.Interfaces;
 using HardWareStore.UI;
-using MedicineShop;
+//using MedicineShop;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace HardWareStore
             ServiceProvider = services.BuildServiceProvider();
 
             
-            var mainForm = ServiceProvider.GetRequiredService<Dashboards>();
+            var mainForm = ServiceProvider.GetRequiredService<Customersale>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)
@@ -38,10 +38,14 @@ namespace HardWareStore
             services.AddScoped<IProductsDL, ProductsDL>();
             services.AddScoped<IVariantsDL, VariantsDL>();
             services.AddScoped<IInventoryDL, InventoryDL>();
-            services.AddTransient<Dashboards>();
+            services.AddTransient<Dashboard>();
             services.AddTransient<InventoryMain>();
             services.AddTransient<ProductsMain>();
             services.AddTransient<VariantsMain>();
+            services.AddTransient<Customersale>();
+            services.AddTransient<Addcustomer>();
+            services.AddTransient<Quotaion>();
+
             services.AddTransient<AddPurchaseBatchForm>();
             services.AddTransient<SupplierBillDetailsForm>();
             services.AddTransient<SupplierBillsForm>();

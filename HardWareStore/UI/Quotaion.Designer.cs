@@ -1,7 +1,8 @@
 ﻿using System.Windows.Forms;
+
 namespace HardWareStore.UI
 {
-    partial class Customersale
+    partial class Quotaion
     {
         /// <summary>
         /// Required designer variable.
@@ -29,8 +30,16 @@ namespace HardWareStore.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.product_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.unit_of_measure = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.category_type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sale_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.final = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtproductsearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -51,18 +60,6 @@ namespace HardWareStore.UI
             this.txtfinalprice = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.txtquotaion = new System.Windows.Forms.TextBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ProductName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UnitOfMeasure = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.category_type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sale_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.final = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -76,9 +73,9 @@ namespace HardWareStore.UI
             this.dataGridView1.BackgroundColor = System.Drawing.Color.AliceBlue;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ProductName,
+            this.product_name,
             this.size,
-            this.UnitOfMeasure,
+            this.unit_of_measure,
             this.category_type,
             this.sale_price,
             this.quantity,
@@ -90,9 +87,79 @@ namespace HardWareStore.UI
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(1575, 494);
+            this.dataGridView1.Size = new System.Drawing.Size(1575, 530);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // product_name
+            // 
+            this.product_name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.product_name.DataPropertyName = "product_name";
+            this.product_name.HeaderText = "Product";
+            this.product_name.MinimumWidth = 8;
+            this.product_name.Name = "product_name";
+            this.product_name.ReadOnly = true;
+            // 
+            // size
+            // 
+            this.size.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.size.HeaderText = "size";
+            this.size.MinimumWidth = 8;
+            this.size.Name = "size";
+            // 
+            // unit_of_measure
+            // 
+            this.unit_of_measure.HeaderText = "unit_of_measure";
+            this.unit_of_measure.MinimumWidth = 8;
+            this.unit_of_measure.Name = "unit_of_measure";
+            this.unit_of_measure.Width = 150;
+            // 
+            // category_type
+            // 
+            this.category_type.HeaderText = "category_type";
+            this.category_type.MinimumWidth = 8;
+            this.category_type.Name = "category_type";
+            this.category_type.Width = 150;
+            // 
+            // sale_price
+            // 
+            this.sale_price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sale_price.DataPropertyName = "sale_price";
+            this.sale_price.HeaderText = "Unit Price";
+            this.sale_price.MinimumWidth = 8;
+            this.sale_price.Name = "sale_price";
+            // 
+            // quantity
+            // 
+            this.quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.quantity.DataPropertyName = "quantity";
+            this.quantity.HeaderText = "quantity";
+            this.quantity.MinimumWidth = 8;
+            this.quantity.Name = "quantity";
+            // 
+            // discount
+            // 
+            this.discount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.discount.DataPropertyName = "discount";
+            this.discount.HeaderText = "discount";
+            this.discount.MinimumWidth = 8;
+            this.discount.Name = "discount";
+            // 
+            // final
+            // 
+            this.final.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.final.DataPropertyName = "final";
+            this.final.HeaderText = "total";
+            this.final.MinimumWidth = 8;
+            this.final.Name = "final";
+            // 
+            // total
+            // 
+            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.total.DataPropertyName = "total";
+            this.total.HeaderText = "final";
+            this.total.MinimumWidth = 8;
+            this.total.Name = "total";
             // 
             // txtproductsearch
             // 
@@ -111,9 +178,9 @@ namespace HardWareStore.UI
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.label1.Location = new System.Drawing.Point(656, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(324, 52);
+            this.label1.Size = new System.Drawing.Size(219, 52);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Customer Sale";
+            this.label1.Text = "Quotation";
             // 
             // panel1
             // 
@@ -135,8 +202,8 @@ namespace HardWareStore.UI
             this.panel1.Controls.Add(this.txtfinalprice);
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.txtproductsearch);
             this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.txtproductsearch);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -257,7 +324,7 @@ namespace HardWareStore.UI
             this.iconButton1.IconColor = System.Drawing.Color.Green;
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton1.Location = new System.Drawing.Point(614, 775);
+            this.iconButton1.Location = new System.Drawing.Point(614, 811);
             this.iconButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.iconButton1.Name = "iconButton1";
             this.iconButton1.Size = new System.Drawing.Size(150, 64);
@@ -341,8 +408,6 @@ namespace HardWareStore.UI
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(148)))), ((int)(((byte)(197)))));
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Controls.Add(this.txtquotaion);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
@@ -352,111 +417,14 @@ namespace HardWareStore.UI
             this.panel2.TabIndex = 0;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(243, 45);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Search";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // txtquotaion
-            // 
-            this.txtquotaion.Location = new System.Drawing.Point(12, 45);
-            this.txtquotaion.Name = "txtquotaion";
-            this.txtquotaion.Size = new System.Drawing.Size(209, 26);
-            this.txtquotaion.TabIndex = 3;
-            this.txtquotaion.TextChanged += new System.EventHandler(this.txtquotaion_TextChanged);
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
-            // ProductName
-            // 
-            this.ProductName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ProductName.DataPropertyName = "ProductName";
-            this.ProductName.HeaderText = "Product_name";
-            this.ProductName.MinimumWidth = 8;
-            this.ProductName.Name = "ProductName";
-            this.ProductName.ReadOnly = true;
-            // 
-            // size
-            // 
-            this.size.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.size.DataPropertyName = "Size";
-            this.size.HeaderText = "size";
-            this.size.MinimumWidth = 8;
-            this.size.Name = "size";
-            // 
-            // UnitOfMeasure
-            // 
-            this.UnitOfMeasure.DataPropertyName = "UnitOfMeasure";
-            this.UnitOfMeasure.HeaderText = "unit_of_measure";
-            this.UnitOfMeasure.MinimumWidth = 8;
-            this.UnitOfMeasure.Name = "UnitOfMeasure";
-            this.UnitOfMeasure.Width = 150;
-            // 
-            // category_type
-            // 
-            this.category_type.DataPropertyName = "category_type";
-            this.category_type.HeaderText = "category_type";
-            this.category_type.MinimumWidth = 8;
-            this.category_type.Name = "category_type";
-            this.category_type.Width = 150;
-            // 
-            // sale_price
-            // 
-            this.sale_price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.sale_price.DataPropertyName = "sale_price";
-            this.sale_price.HeaderText = "Unit Price";
-            this.sale_price.MinimumWidth = 8;
-            this.sale_price.Name = "sale_price";
-            // 
-            // quantity
-            // 
-            this.quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.quantity.DataPropertyName = "quantity";
-            this.quantity.HeaderText = "quantity";
-            this.quantity.MinimumWidth = 8;
-            this.quantity.Name = "quantity";
-            // 
-            // discount
-            // 
-            this.discount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.discount.DataPropertyName = "discount";
-            this.discount.HeaderText = "discount";
-            this.discount.MinimumWidth = 8;
-            this.discount.Name = "discount";
-            // 
-            // final
-            // 
-            this.final.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.final.DataPropertyName = "final";
-            this.final.HeaderText = "total";
-            this.final.MinimumWidth = 8;
-            this.final.Name = "final";
-            // 
-            // total
-            // 
-            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.total.DataPropertyName = "total";
-            this.total.HeaderText = "final";
-            this.total.MinimumWidth = 8;
-            this.total.Name = "total";
-            // 
-            // Customersale
+            // Quotaion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1583, 904);
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Name = "Customersale";
+            this.Name = "Quotaion";
             this.Text = "Customersale";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Customersale_FormClosing);
             this.Load += new System.EventHandler(this.Customersale_Load);
@@ -494,12 +462,9 @@ namespace HardWareStore.UI
         private RadioButton walking_in;
         private RadioButton regular;
         private FontAwesome.Sharp.IconButton iconButton4;
-        private TextBox txtquotaion;
-        private ContextMenuStrip contextMenuStrip1;
-        private Button button1;
-        private DataGridViewTextBoxColumn ProductName;
+        private DataGridViewTextBoxColumn product_name;
         private DataGridViewTextBoxColumn size;
-        private DataGridViewTextBoxColumn UnitOfMeasure;
+        private DataGridViewTextBoxColumn unit_of_measure;
         private DataGridViewTextBoxColumn category_type;
         private DataGridViewTextBoxColumn sale_price;
         private DataGridViewTextBoxColumn quantity;
