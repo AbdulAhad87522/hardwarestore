@@ -681,7 +681,7 @@ namespace HardWareStore.UI
                             try
                             {
                                 string customerName = string.IsNullOrEmpty(txtcustsearch.Text) ? "Walk-in Customer" : txtcustsearch.Text.Trim();
-                                Customersaledl.CreateA4ReceiptPdf(dataGridView1, saveDialog.FileName, customerName,
+                                FetchQuotationDataclass.CreateA4ReceiptPdf(dataGridView1, saveDialog.FileName, customerName,
                                     Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text),
                                     Convert.ToDecimal(txtfinaldiscount.Text));
 

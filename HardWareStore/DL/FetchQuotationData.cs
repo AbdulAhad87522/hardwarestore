@@ -4,8 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using HardWareStore.Models;
 using MySql.Data.MySqlClient;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace HardWareStore.DL
 {
@@ -155,5 +159,165 @@ namespace HardWareStore.DL
                 }
             }
         }
+
+        public static void CreateA4ReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid, decimal totaldiscount)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(40);
+                    page.DefaultTextStyle(x => x.FontFamily("Arial").FontSize(11));
+
+                    page.Content().Column(column =>
+                    {
+                        column.Item().AlignCenter().Text("Hardware store").Bold().FontSize(24);
+                        column.Item().AlignCenter().Text("Main bazar lahore").FontSize(12);
+                        column.Item().AlignCenter().Text("Phone: 03021222005").FontSize(12);
+                        column.Item().PaddingVertical(10).LineHorizontal(1);
+
+                        column.Item().PaddingBottom(10).Row(row =>
+                        {
+                            row.RelativeItem().Column(infoCol =>
+                            {
+                                infoCol.Item().Text($"Customer: {customerName}").Bold();
+                                infoCol.Item().Text($"quotation #: INV-{DateTime.Now:yyMMddHHmm}");
+                            });
+                            row.RelativeItem().AlignRight().Column(dateCol =>
+                            {
+                                dateCol.Item().Text($"Date: {DateTime.Now:dd-MMM-yyyy}");
+                                dateCol.Item().Text($"Time: {DateTime.Now:hh:mm tt}");
+                            });
+                        });
+
+                        column.Item().PaddingBottom(15).LineHorizontal(0.5f);
+
+                        column.Item().PaddingBottom(5).Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(3);
+                                columns.ConstantColumn(60);
+                                columns.ConstantColumn(70);
+                                columns.ConstantColumn(60);
+                                columns.ConstantColumn(70);
+                                columns.ConstantColumn(60);
+                                columns.ConstantColumn(80);
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell().Padding(5).Background("#f0f0f0").Text("Product").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Size").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Unit").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Qty").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Price").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Discount").Bold();
+                                header.Cell().Padding(5).Background("#f0f0f0").AlignRight().Text("Total").Bold();
+                            });
+                        });
+
+                        decimal totalDiscount = 0;
+                        decimal subTotal = 0;
+                        int itemCount = 0;
+
+                        foreach (DataGridViewRow row in cart.Rows)
+                        {
+                            if (row.IsNewRow) continue;
+
+                            // USE INDICES INSTEAD OF COLUMN NAMES
+                            string name = row.Cells[0]?.Value?.ToString() ?? ""; // product_name
+                            string size = row.Cells[1]?.Value?.ToString() ?? ""; // size
+                            string unit = row.Cells[2]?.Value?.ToString() ?? ""; // unit_of_measure
+                            string qty = row.Cells[5]?.Value?.ToString() ?? "0"; // quantity
+                            decimal price = ConvertToDecimalSafe(row.Cells[4]?.Value ?? 0); // sale_price
+                            decimal discount = ConvertToDecimalSafe(row.Cells[6]?.Value ?? 0); // discount
+                            decimal itemTotal = ConvertToDecimalSafe(row.Cells[8]?.Value ?? 0); // final
+
+                            totalDiscount += discount * Convert.ToDecimal(qty);
+                            subTotal += itemTotal;
+                            itemCount++;
+
+                            column.Item().Table(table =>
+                            {
+                                table.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn(3);
+                                    columns.ConstantColumn(60);
+                                    columns.ConstantColumn(70);
+                                    columns.ConstantColumn(60);
+                                    columns.ConstantColumn(70);
+                                    columns.ConstantColumn(60);
+                                    columns.ConstantColumn(80);
+                                });
+
+                                table.Cell().Padding(5).Text(name);
+                                table.Cell().Padding(5).AlignRight().Text(size);
+                                table.Cell().Padding(5).AlignRight().Text(unit);
+                                table.Cell().Padding(5).AlignRight().Text(qty);
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {price:N2}");
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {discount:N2}");
+                                table.Cell().Padding(5).AlignRight().Text($"Rs. {itemTotal:N2}").Bold();
+                            });
+
+                            if (itemCount < cart.Rows.Count - 1)
+                            {
+                                column.Item().PaddingHorizontal(10).LineHorizontal(0.2f);
+                            }
+                        }
+
+                        column.Item().PaddingTop(20).Table(summaryTable =>
+                        {
+                            summaryTable.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn();
+                                columns.ConstantColumn(150);
+                            });
+
+                            summaryTable.Cell().Padding(3).AlignRight().Text("Subtotal:");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {(subTotal + totalDiscount):N2}");
+
+                            summaryTable.Cell().Padding(3).AlignRight().Text("Total Discount:");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {totaldiscount:N2}");
+
+                            summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text("TOTAL:").Bold();
+                            summaryTable.Cell().Padding(5).Background("#e8f4fd").AlignRight().Text($"Rs. {total:N2}").Bold().FontSize(12);
+
+                            summaryTable.Cell().Padding(3).AlignRight().Text("Amount Paid:");
+                            summaryTable.Cell().Padding(3).AlignRight().Text($"Rs. {paid:N2}");
+
+                            summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text("BALANCE:").Bold();
+                            summaryTable.Cell().Padding(5).Background("#fff8dc").AlignRight().Text($"Rs. {(total - paid):N2}").Bold();
+                        });
+
+                        column.Item().PaddingVertical(15).LineHorizontal(1);
+
+                        column.Item().AlignCenter().Text("Thank you for your shopping here!").Bold().FontSize(14);
+                        column.Item().PaddingVertical(5).AlignCenter().Text("بل کے بغیر واپسی نہیں ہوگی");
+                        column.Item().AlignCenter().Text("آپ کے اعتماد کا شکریہ");
+
+                        column.Item().PaddingVertical(15).AlignCenter().Text("Terms & Conditions:").SemiBold();
+                        column.Item().AlignCenter().Text("• Goods once sold cannot be returned or exchanged");
+                        column.Item().AlignCenter().Text("• Please check items at the time of purchase");
+
+                        column.Item().PaddingVertical(20).LineHorizontal(0.5f);
+
+                        column.Item().AlignCenter().Text("Developed By: devinfantary.com | 03477048001").FontSize(9);
+                        column.Item().AlignCenter().Text($"Printed on: {DateTime.Now:dd-MMM-yyyy hh:mm tt}").FontSize(9);
+                    });
+                });
+            }).GeneratePdf(filePath);
+        }
+        public static decimal ConvertToDecimalSafe(object value, decimal defaultValue = 0)
+        {
+            if (value == null) return defaultValue;
+            if (decimal.TryParse(value.ToString(), out decimal result))
+                return result;
+            return defaultValue;
+        }
+
     }
 }

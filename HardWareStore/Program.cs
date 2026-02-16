@@ -29,7 +29,7 @@ namespace HardWareStore
             ServiceProvider = services.BuildServiceProvider();
 
             
-            var mainForm = ServiceProvider.GetRequiredService<CompanyMain>();
+            var mainForm = ServiceProvider.GetRequiredService<Quotaion>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)
