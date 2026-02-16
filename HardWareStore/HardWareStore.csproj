@@ -116,11 +116,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL\CompanyBL.cs" />
     <Compile Include="BL\Customerbillbl.cs" />
     <Compile Include="BL\CustomerBl.cs" />
     <Compile Include="BL\internal class CustomerBill_SpecificProductsBL.cs" />
     <Compile Include="BL\Temporarycustomersale.cs" />
     <Compile Include="DL\BillingRecordsOverviewDL.cs" />
+    <Compile Include="DL\CompanyDL.cs" />
+    <Compile Include="DL\Custbilldl.cs" />
     <Compile Include="DL\Customerbilldl.cs" />
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
     <Compile Include="DL\Customerdl.cs" />
@@ -134,13 +137,19 @@
     <Compile Include="DL\Purchasebatchdl.cs" />
     <Compile Include="DL\Supplierpaymentdl.cs" />
     <Compile Include="DL\VariantsDl.cs" />
+    <Compile Include="Interfaces\ICompanyDL.cs" />
+    <Compile Include="Interfaces\Icustomerbillbl.cs" />
+    <Compile Include="Interfaces\Icustomerbilldl.cs" />
     <Compile Include="Interfaces\IInventoryDL.cs" />
     <Compile Include="Interfaces\IProductsDL.cs" />
     <Compile Include="Interfaces\IPurchaseBatchDL.cs" />
     <Compile Include="Interfaces\IVariantsDL.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\custbill.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\customerbill.cs" />
     <Compile Include="Models\Customerrecord.cs" />
+    <Compile Include="Models\custPaymentRecord.cs" />
     <Compile Include="Models\DashboardStats.cs" />
     <Compile Include="Models\InventoryResponse.cs" />
     <Compile Include="Models\Products.cs" />
@@ -152,6 +161,12 @@
     <Compile Include="Models\Variants.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\AddCompany.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddCompany.Designer.cs">
+      <DependentUpon>AddCompany.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Addcustomer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,11 +185,35 @@
     <Compile Include="UI\BatchItemsForm.Designer.cs">
       <DependentUpon>BatchItemsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\CompanyMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CompanyMain.Designer.cs">
+      <DependentUpon>CompanyMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\customerbillspecui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customerbillspecui.Designer.cs">
+      <DependentUpon>customerbillspecui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\customerbillui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customerbillui.Designer.cs">
+      <DependentUpon>customerbillui.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\CustomerBill_SpecificProducts.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\CustomerBill_SpecificProducts.Designer.cs">
       <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Customermain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Customermain.Designer.cs">
+      <DependentUpon>Customermain.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Customersale.cs">
       <SubType>Form</SubType>
@@ -212,6 +251,12 @@
     <Compile Include="UI\Quotaion.Designer.cs">
       <DependentUpon>Quotaion.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\SaleDetailsform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SaleDetailsform.Designer.cs">
+      <DependentUpon>SaleDetailsform.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Supplierbilldetailsform.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -245,6 +290,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\BatchItemsForm.resx">
       <DependentUpon>BatchItemsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CompanyMain.resx">
+      <DependentUpon>CompanyMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Customersale.resx">
       <DependentUpon>Customersale.cs</DependentUpon>

@@ -29,7 +29,7 @@ namespace HardWareStore
             ServiceProvider = services.BuildServiceProvider();
 
             
-            var mainForm = ServiceProvider.GetRequiredService<Customersale>();
+            var mainForm = ServiceProvider.GetRequiredService<CompanyMain>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)
@@ -38,6 +38,9 @@ namespace HardWareStore
             services.AddScoped<IProductsDL, ProductsDL>();
             services.AddScoped<IVariantsDL, VariantsDL>();
             services.AddScoped<IInventoryDL, InventoryDL>();
+            //services.AddScoped<Icustomerbilldl, Customerbilldl>();
+
+
             services.AddTransient<Dashboard>();
             services.AddTransient<InventoryMain>();
             services.AddTransient<ProductsMain>();
@@ -45,6 +48,13 @@ namespace HardWareStore
             services.AddTransient<Customersale>();
             services.AddTransient<Addcustomer>();
             services.AddTransient<Quotaion>();
+            services.AddTransient<customerbillui>();
+            services.AddTransient<customerbillspecui>();
+            services.AddTransient<Customermain>();
+            services.AddTransient<AddCompany>();
+            services.AddTransient<CompanyMain>();
+
+
 
             services.AddTransient<AddPurchaseBatchForm>();
             services.AddTransient<SupplierBillDetailsForm>();
