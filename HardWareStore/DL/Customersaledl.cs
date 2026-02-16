@@ -28,34 +28,32 @@ namespace HardWareStore.DL
             {
                 con.Open();
                 string query = @"SELECT 
-                                m.product_id,
-                                m.name, 
-                                m.description,
-                                c.company_name, 
-                                (SELECT bi.purchase_price 
-                                 FROM batch_items bi 
-                                 WHERE bi.product_id = m.product_id 
-                                   AND bi.quantity_remaining > 0 
-                                   AND bi.expiry_date > CURDATE()
-                                 ORDER BY bi.expiry_date ASC 
-                                 LIMIT 1) as purchase_price,
-                                m.sale_price,
-                                SUM(b.quantity_remaining) as quantity_remaining,
-                                p.packing_name, 
-                                ca.category_name, 
-                                MIN(b.expiry_date) as expiry_date
-                            FROM batch_items b
-                            JOIN medicines m ON m.product_id = b.product_id
-                            JOIN company c ON c.company_id = m.company_id
-                            JOIN packing p ON m.packing_id = p.packing_id
-                            JOIN categories ca ON ca.category_id = m.category_id
-                            WHERE m.name LIKE @text 
-                                AND b.quantity_remaining > 0 
-                                AND b.expiry_date > CURDATE()
-                            GROUP BY m.product_id, m.name, m.description, c.company_name, 
-                                     m.sale_price, p.packing_name, ca.category_name
-                            HAVING SUM(b.quantity_remaining) > 0
-                            ORDER BY m.name, expiry_date;";
+                                    p.product_id,
+                                    p.name AS product_name,
+                                    pv.size,
+                                    p.description,
+                                    pv.unit_of_measure,
+                                    pv.quantity_in_stock,
+                                    pv.price_per_unit as sale_price,
+                                    s.name AS supplier_name,
+                                    l.value AS category_type,
+                                    pv.variant_id
+                                FROM products p
+                                INNER JOIN product_variants pv ON p.product_id = pv.product_id
+                                LEFT JOIN supplier s ON p.supplier_id = s.supplier_id
+                                LEFT JOIN lookup l ON p.category_id = l.lookup_id
+                                WHERE 
+                                    p.is_active = TRUE 
+                                    AND pv.is_active = TRUE
+                                    AND l.type = 'category'
+                                    AND (
+                                        p.name LIKE @text
+                                        -- OR pv.size LIKE '1'
+                                --         OR p.description LIKE 'a'
+                                --         OR s.name LIKE 'a'
+                                --         OR l.value LIKE 'a'
+                                    )
+                                ORDER BY p.name, pv.size;";
 
                 using (MySqlCommand cmd = new MySqlCommand(query, con))
                 {
@@ -113,7 +111,7 @@ namespace HardWareStore.DL
         }
 
         // Updated SaveDataToDatabase - Uses product_id and implements FIFO deduction
-        public bool SaveDataToDatabase(int? id, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d)
+        public bool SaveDataToDatabase(int? customerId, DateTime? date, decimal? total_amount, decimal? paid_amount, DataGridView d, int staffId = 1)
         {
             using (var con = DatabaseHelper.Instance.GetConnection())
             {
@@ -128,162 +126,195 @@ namespace HardWareStore.DL
                             throw new Exception("No products selected for sale");
                         }
 
-                        string query = @"INSERT INTO sales (customer_id, total_amount, paid_amount, sale_date) 
-                VALUES (@id, @total_amount, @paid_amount, @date);
-                SELECT LAST_INSERT_ID();";
-                        int billid;
-                        using (MySqlCommand cmd = new MySqlCommand(query, con, tran))
+                        // Generate bill number
+                        string billNumber = $"INV-{DateTime.Now:yyyy}-{DateTime.Now:MMddHHmmss}";
+
+                        // Get payment status lookup_id (assuming 'paid' or 'partial' status exists)
+                        int paymentStatusId;
+                        string statusQuery = "SELECT lookup_id FROM lookup WHERE type = 'payment_status' AND value = @status";
+                        using (MySqlCommand statusCmd = new MySqlCommand(statusQuery, con, tran))
                         {
-                            cmd.Parameters.AddWithValue("@id", id ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@total_amount", total_amount ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@paid_amount", paid_amount ?? (object)DBNull.Value);
-                            cmd.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
+                            string status = (paid_amount >= total_amount) ? "paid" : "partial";
+                            statusCmd.Parameters.AddWithValue("@status", status);
+                            object statusResult = statusCmd.ExecuteScalar();
+                            if (statusResult == null)
+                            {
+                                throw new Exception("Payment status not found in lookup table");
+                            }
+                            paymentStatusId = Convert.ToInt32(statusResult);
+                        }
+
+                        // Insert into bills table
+                        decimal amountDue = (total_amount ?? 0) - (paid_amount ?? 0);
+                        string billQuery = @"INSERT INTO bills 
+                    (bill_number, bill_date, customer_id, staff_id, subtotal, discount_amount, 
+                     total_amount, amount_paid, amount_due, payment_status_id) 
+                    VALUES 
+                    (@bill_number, @bill_date, @customer_id, @staff_id, @subtotal, @discount_amount,
+                     @total_amount, @amount_paid, @amount_due, @payment_status_id);
+                    SELECT LAST_INSERT_ID();";
+
+                        int billId;
+                        using (MySqlCommand cmd = new MySqlCommand(billQuery, con, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@bill_number", billNumber);
+                            cmd.Parameters.AddWithValue("@bill_date", date ?? DateTime.Now);
+                            cmd.Parameters.AddWithValue("@customer_id", customerId ?? (object)DBNull.Value);
+                            cmd.Parameters.AddWithValue("@staff_id", staffId);
+                            cmd.Parameters.AddWithValue("@subtotal", total_amount ?? 0);
+                            cmd.Parameters.AddWithValue("@discount_amount", 0); // Adjust if you have total discount
+                            cmd.Parameters.AddWithValue("@total_amount", total_amount ?? 0);
+                            cmd.Parameters.AddWithValue("@amount_paid", paid_amount ?? 0);
+                            cmd.Parameters.AddWithValue("@amount_due", amountDue);
+                            cmd.Parameters.AddWithValue("@payment_status_id", paymentStatusId);
+                            //cmd.Parameters.AddWithValue("@payment_method", "cash"); // Adjust as needed
 
                             object result = cmd.ExecuteScalar();
                             if (result == null)
                             {
-                                throw new Exception("Failed to get sale ID");
+                                throw new Exception("Failed to get bill ID");
                             }
-                            billid = Convert.ToInt32(result);
+                            billId = Convert.ToInt32(result);
                         }
 
-                        // Insert into customer price record
-                        string query2 = "INSERT INTO customerpricerecord (customer_id, sale_id, date, payment) VALUES (@c_id, @s_id, @date, @payment)";
-                        using (MySqlCommand cmd2 = new MySqlCommand(query2, con, tran))
-                        {
-                            cmd2.Parameters.AddWithValue("@c_id", id ?? (object)DBNull.Value);
-                            cmd2.Parameters.AddWithValue("@s_id", billid);
-                            cmd2.Parameters.AddWithValue("@date", date ?? (object)DBNull.Value);
-                            cmd2.Parameters.AddWithValue("@payment", paid_amount ?? (object)DBNull.Value);
-                            cmd2.ExecuteNonQuery();
-                        }
-
+                        // Process each product in the DataGridView
                         foreach (DataGridViewRow row in d.Rows)
                         {
                             if (row.IsNewRow) continue;
 
-                            int productid;
-                            string name = row.Cells["name"]?.Value?.ToString()?.Trim();
+                            string productName = row.Cells["product_name"]?.Value?.ToString()?.Trim();
+                            string size = row.Cells["size"]?.Value?.ToString()?.Trim();
 
-                            if (string.IsNullOrEmpty(name))
+                            if (string.IsNullOrEmpty(productName))
                             {
                                 throw new Exception("Product name is missing");
                             }
 
-                            // Get product ID and sale price
-                            string productidquery = "SELECT product_id, sale_price FROM medicines WHERE name = @name";
-                            using (MySqlCommand command2 = new MySqlCommand(productidquery, con, tran))
+                            // Parse and validate quantity
+                            if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal quantity) || quantity <= 0)
                             {
-                                command2.Parameters.AddWithValue("@name", name);
-                                using (var reader = command2.ExecuteReader())
+                                throw new Exception($"Invalid quantity for product: {productName}");
+                            }
+
+                            // Get product and variant details
+                            int productId;
+                            int variantId;
+                            decimal salePrice;
+                            decimal currentStock;
+                            string unitOfMeasure;
+
+                            string productQuery = @"SELECT 
+                                            p.product_id, 
+                                            pv.variant_id,
+                                            pv.price_per_unit,
+                                            pv.quantity_in_stock,
+                                            pv.unit_of_measure
+                                        FROM products p
+                                        INNER JOIN product_variants pv ON p.product_id = pv.product_id
+                                        WHERE p.name = @product_name 
+                                        AND pv.size = @size
+                                        AND p.is_active = TRUE 
+                                        AND pv.is_active = TRUE";
+
+                            using (MySqlCommand productCmd = new MySqlCommand(productQuery, con, tran))
+                            {
+                                productCmd.Parameters.AddWithValue("@product_name", productName);
+                                productCmd.Parameters.AddWithValue("@size", string.IsNullOrEmpty(size) ? "" : size);
+
+                                using (var reader = productCmd.ExecuteReader())
                                 {
                                     if (reader.Read())
                                     {
-                                        productid = reader.GetInt32("product_id");
-                                        decimal salePrice = reader.GetDecimal("sale_price");
+                                        productId = reader.GetInt32("product_id");
+                                        variantId = reader.GetInt32("variant_id");
+                                        salePrice = reader.GetDecimal("price_per_unit");
+                                        currentStock = reader.GetDecimal("quantity_in_stock");
+                                        unitOfMeasure = reader.GetString("unit_of_measure");
                                         reader.Close();
 
-                                        // Parse and validate quantity
-                                        if (!decimal.TryParse(row.Cells["quantity"]?.Value?.ToString(), out decimal remainingQty) || remainingQty <= 0)
+                                        // Check if sufficient stock is available
+                                        if (currentStock < quantity)
                                         {
-                                            throw new Exception($"Invalid quantity for product: {name}");
+                                            throw new Exception($"Insufficient stock for {productName} ({size}). Available: {currentStock}, Requested: {quantity}");
                                         }
 
-                                        // Parse discount
-                                        decimal discount = 0;
-                                        if (row.Cells["discount"]?.Value != null)
+                                        // Calculate line total (price may be overridden in grid)
+                                        decimal unitPrice = salePrice;
+                                        if (row.Cells["sale_price"] != null &&
+                                            decimal.TryParse(row.Cells["sale_price"]?.Value?.ToString(), out decimal gridPrice) &&
+                                            gridPrice > 0)
                                         {
-                                            if (!decimal.TryParse(row.Cells["discount"].Value.ToString(), out discount) || discount < 0)
+                                            unitPrice = gridPrice;
+                                        }
+
+                                        decimal lineTotal = unitPrice * quantity;
+
+                                        // Insert bill item
+                                        string billItemQuery = @"INSERT INTO bill_items 
+                                    (bill_id, product_id, variant_id, quantity, unit_of_measure, unit_price, line_total, notes) 
+                                    VALUES 
+                                    (@bill_id, @product_id, @variant_id, @quantity, @unit_of_measure, @unit_price, @line_total, @notes)";
+
+                                        using (MySqlCommand billItemCmd = new MySqlCommand(billItemQuery, con, tran))
+                                        {
+                                            billItemCmd.Parameters.AddWithValue("@bill_id", billId);
+                                            billItemCmd.Parameters.AddWithValue("@product_id", productId);
+                                            billItemCmd.Parameters.AddWithValue("@variant_id", variantId);
+                                            billItemCmd.Parameters.AddWithValue("@quantity", quantity);
+                                            billItemCmd.Parameters.AddWithValue("@unit_of_measure", unitOfMeasure);
+                                            billItemCmd.Parameters.AddWithValue("@unit_price", unitPrice);
+                                            billItemCmd.Parameters.AddWithValue("@line_total", lineTotal);
+                                            billItemCmd.Parameters.AddWithValue("@notes", DBNull.Value);
+
+                                            int rowsInserted = billItemCmd.ExecuteNonQuery();
+                                            if (rowsInserted == 0)
                                             {
-                                                throw new Exception($"Invalid discount for product: {name}");
+                                                throw new Exception($"Failed to insert bill item for: {productName}");
                                             }
                                         }
 
-                                        // Get available batches ordered by expiry date (FIFO - nearest first)
-                                        string getBatchesQuery = @"SELECT batch_item_id, quantity_remaining 
-                                                  FROM batch_items 
-                                                  WHERE product_id = @product_id 
-                                                  AND quantity_remaining > 0 
-                                                  AND expiry_date > CURDATE()
-                                                  ORDER BY expiry_date ASC, batch_item_id ASC";
+                                        // Note: Stock reduction is handled by trigger 'trg_reduce_stock_on_bill'
+                                        // The trigger automatically reduces product_variants.quantity_in_stock
+                                        // when a bill_item is inserted
 
-                                        List<(int batchItemId, decimal availableQty)> batches = new List<(int, decimal)>();
-                                        using (MySqlCommand batchesCmd = new MySqlCommand(getBatchesQuery, con, tran))
+                                        // Verify stock was reduced (optional verification)
+                                        string verifyStockQuery = "SELECT quantity_in_stock FROM product_variants WHERE variant_id = @variant_id";
+                                        using (MySqlCommand verifyCmd = new MySqlCommand(verifyStockQuery, con, tran))
                                         {
-                                            batchesCmd.Parameters.AddWithValue("@product_id", productid);
-                                            using (var batchesReader = batchesCmd.ExecuteReader())
+                                            verifyCmd.Parameters.AddWithValue("@variant_id", variantId);
+                                            object newStock = verifyCmd.ExecuteScalar();
+                                            if (newStock == null)
                                             {
-                                                while (batchesReader.Read())
-                                                {
-                                                    int batchItemId = batchesReader.GetInt32("batch_item_id");
-                                                    decimal availableQty = batchesReader.GetDecimal("quantity_remaining");
-                                                    batches.Add((batchItemId, availableQty));
-                                                }
-                                            }
-                                        }
-
-                                        // Check if total available quantity is sufficient
-                                        decimal totalAvailable = batches.Sum(b => b.availableQty);
-                                        if (totalAvailable < remainingQty)
-                                        {
-                                            throw new Exception($"Insufficient stock for product: {name}. Available: {totalAvailable}, Requested: {remainingQty}");
-                                        }
-
-                                        int batchitemidd = batches[0].batchItemId;
-                                        // Insert single sale_items record with product_id
-                                        string detailquery = @"INSERT INTO sale_items (sale_id, product_id, batch_item_id, quantity, price, Discount) 
-                              VALUES (@bill_iid, @product_id, @batch_item_id, @quantity, @price, @discount)";
-
-                                        using (MySqlCommand command = new MySqlCommand(detailquery, con, tran))
-                                        {
-                                            command.Parameters.AddWithValue("@bill_iid", billid);
-                                            command.Parameters.AddWithValue("@product_id", productid);
-                                            command.Parameters.AddWithValue("@batch_item_id", batchitemidd);
-                                            command.Parameters.AddWithValue("@price", salePrice);
-                                            command.Parameters.AddWithValue("@quantity", remainingQty);
-                                            command.Parameters.AddWithValue("@discount", discount);
-                                            command.ExecuteNonQuery();
-                                        }
-
-                                        // Distribute quantity deduction across batches (FIFO - nearest expiry first)
-                                        decimal qtyToDeduct = remainingQty;
-                                        foreach (var batch in batches)
-                                        {
-                                            if (qtyToDeduct <= 0) break;
-
-                                            decimal quantityToDeduct = Math.Min(qtyToDeduct, batch.availableQty);
-
-                                            // Update batch stock
-                                            string queryupdatequantity = @"UPDATE batch_items 
-                                              SET quantity_remaining = quantity_remaining - @quantitysold 
-                                              WHERE batch_item_id = @batch_item_id";
-
-                                            using (MySqlCommand comma = new MySqlCommand(queryupdatequantity, con, tran))
-                                            {
-                                                comma.Parameters.AddWithValue("@batch_item_id", batch.batchItemId);
-                                                comma.Parameters.AddWithValue("@quantitysold", quantityToDeduct);
-
-                                                int rowsAffected = comma.ExecuteNonQuery();
-                                                if (rowsAffected == 0)
-                                                {
-                                                    throw new Exception($"Failed to update stock for product: {name} in batch {batch.batchItemId}");
-                                                }
+                                                throw new Exception($"Failed to verify stock reduction for: {productName}");
                                             }
 
-                                            qtyToDeduct -= quantityToDeduct;
-                                        }
-
-                                        // Verify all quantity was deducted
-                                        if (qtyToDeduct > 0)
-                                        {
-                                            throw new Exception($"Failed to deduct all quantity for product: {name}. Remaining: {qtyToDeduct}");
+                                            decimal verifiedStock = Convert.ToDecimal(newStock);
+                                            decimal expectedStock = currentStock - quantity;
+                                            if (verifiedStock != expectedStock)
+                                            {
+                                                throw new Exception($"Stock mismatch for {productName}. Expected: {expectedStock}, Got: {verifiedStock}");
+                                            }
                                         }
                                     }
                                     else
                                     {
-                                        throw new Exception($"Product not found: {name}");
+                                        throw new Exception($"Product not found: {productName} ({size})");
                                     }
                                 }
+                            }
+                        }
+
+                        // Update customer balance if credit customer
+                        if (customerId.HasValue && amountDue > 0)
+                        {
+                            string updateBalanceQuery = @"UPDATE customer 
+                                                  SET current_balance = current_balance + @amount_due 
+                                                  WHERE customer_id = @customer_id";
+                            using (MySqlCommand balanceCmd = new MySqlCommand(updateBalanceQuery, con, tran))
+                            {
+                                balanceCmd.Parameters.AddWithValue("@amount_due", amountDue);
+                                balanceCmd.Parameters.AddWithValue("@customer_id", customerId.Value);
+                                balanceCmd.ExecuteNonQuery();
                             }
                         }
 
@@ -307,7 +338,6 @@ namespace HardWareStore.DL
                 }
             }
         }
-
         // PDF Generation methods remain the same...
         public static void CreateA4ReceiptPdf(DataGridView cart, string filePath, string customerName, decimal total, decimal paid, decimal totaldiscount)
         {

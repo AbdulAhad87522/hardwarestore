@@ -194,6 +194,9 @@
     <EmbeddedResource Include="UI\Addpurchasebatchform.resx">
       <DependentUpon>Addpurchasebatchform.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Customersale.resx">
+      <DependentUpon>Customersale.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

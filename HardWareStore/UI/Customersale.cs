@@ -107,11 +107,14 @@ namespace HardWareStore.UI
                         DataGridViewRow selectedRow = dgvproductsearch.SelectedRows[0];
 
                         // Get values from the row
-                        string name = selectedRow.Cells["name"].Value.ToString();
+                        string name = selectedRow.Cells["product_name"].Value.ToString();
+                        string size = selectedRow.Cells["size"].Value.ToString();
+                        string unit_of_measure = selectedRow.Cells["unit_of_measure"].Value.ToString();
+                        string category_type = selectedRow.Cells["category_type"].Value.ToString();
                         decimal saleprice = Convert.ToDecimal(selectedRow.Cells["sale_price"].Value.ToString());
-                        DateTime expiry = Convert.ToDateTime(selectedRow.Cells["expiry_date"].Value);
-                        expiry = expiry.Date;
-                        dataGridView1.Rows.Add(name, saleprice, expiry);
+                        //DateTime expiry = Convert.ToDateTime(selectedRow.Cells["expiry_date"].Value);
+                        //expiry = expiry.Date;
+                        dataGridView1.Rows.Add(name, size, unit_of_measure, category_type, saleprice);
                         dgvproductsearch.Visible = false;
                         button2.Visible = false;
                         clearfields();
@@ -641,6 +644,7 @@ namespace HardWareStore.UI
                 bool result = _customersaledl.SaveDataToDatabase(
                     id,
                     dateTimePicker1.Value,
+                    //Convert.ToDecimal(txtfinaldiscount.Text),
                     Convert.ToDecimal(txtfinalprice.Text),
                     Convert.ToDecimal(txtpaidamount.Text),
                     dataGridView1
