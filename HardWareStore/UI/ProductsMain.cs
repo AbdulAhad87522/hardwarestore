@@ -3,21 +3,24 @@ using System.Data;
 using System.Windows.Forms;
 using HardWareStore.Models;
 using HardWareStore.DL;
+using HardWareStore.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HardWareStore.UI
 {
     public partial class ProductsMain : Form
     {
-        private readonly ProductsDL _productsDL = new ProductsDL();
+        private readonly IProductsDL _productsDL;
         private readonly DatabaseHelper _db = DatabaseHelper.Instance;
         private int _selectedId = -1;
 
-        public ProductsMain()
+        public ProductsMain(IProductsDL productsDL)
         {
             InitializeComponent();
             LoadProducts();
             CustomizeGrid();
             panelEdit.Visible = false;
+            _productsDL=productsDL;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -391,7 +394,12 @@ namespace HardWareStore.UI
             int productId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["product_id"].Value);
             string productName = dataGridView1.CurrentRow.Cells["Name"].Value.ToString();
 
-            VariantsMain variantsForm = new VariantsMain(productId, productName);
+            // ServiceProvider se form mangwaein taake interfaces automatically inject ho jayein
+            var variantsForm = Program.ServiceProvider.GetRequiredService<VariantsMain>();
+
+            // ID aur Name set karne ke liye aapko VariantsMain mein public properties ya method rakhna hoga
+            variantsForm.SetProductDetails(productId, productName);
+
             variantsForm.ShowDialog();
         }
     }

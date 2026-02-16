@@ -1,4 +1,5 @@
-﻿using HardWareStore.Models;
+﻿using HardWareStore.Interfaces;
+using HardWareStore.Models;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HardWareStore.DL
 {
-    public class InventoryDL
+    public class InventoryDL : IInventoryDL
     {
         private readonly DatabaseHelper _db = DatabaseHelper.Instance;
 

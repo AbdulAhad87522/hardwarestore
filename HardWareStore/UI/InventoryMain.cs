@@ -1,4 +1,5 @@
 ﻿using HardWareStore.DL;
+using HardWareStore.Interfaces;
 using HardWareStore.Models;
 using System;
 using System.Data;
@@ -9,23 +10,30 @@ namespace HardWareStore.UI
 {
     public partial class InventoryMain : Form
     {
-        private readonly InventoryDL _inventoryDL = new InventoryDL();
-        private readonly ProductsDL _productsDL = new ProductsDL();
-        private readonly VariantsDL _variantsDL = new VariantsDL();
+        private readonly IInventoryDL _inventoryDL;
+        private readonly IProductsDL _productsDL;
+        private readonly IVariantsDL _variantsDL;
 
         private int _selectedProductId = -1;
         private int _selectedVariantId = -1;
         private bool _isEditingProduct = false; // true = editing product, false = editing variant
 
-        public InventoryMain()
+        public InventoryMain(IInventoryDL inventoryDl, IProductsDL productsDL, IVariantsDL variantsDL)
         {
             InitializeComponent();
+
+            // Pehlay variables assign karein (Zaroori)
+            _inventoryDL = inventoryDl;
+            _productsDL = productsDL;
+            _variantsDL = variantsDL;
+
+            // Ab methods call karein
             LoadInventory();
             CustomizeGrid();
+
             panelEditProduct.Visible = false;
             panelEditVariant.Visible = false;
         }
-
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             try

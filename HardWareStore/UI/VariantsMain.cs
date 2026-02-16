@@ -1,4 +1,5 @@
 ﻿using HardWareStore.DL;
+using HardWareStore.Interfaces;
 using HardWareStore.Models;
 using System;
 using System.Data;
@@ -9,21 +10,30 @@ namespace HardWareStore.UI
 {
     public partial class VariantsMain : Form
     {
-        private readonly VariantsDL _variantsDL = new VariantsDL();
-        private readonly ProductsDL _productsDL = new ProductsDL();
+        private readonly IVariantsDL _variantsDL;
+        private readonly IProductsDL _productsDL;
         private int _selectedId = -1;
         private int _productId;
         private string _productName;
 
-        public VariantsMain(int productId, string productName)
+        public VariantsMain(IVariantsDL variantsDL, IProductsDL productsDL)
         {
             InitializeComponent();
+            _variantsDL = variantsDL;
+            _productsDL = productsDL;
+
+            // LoadVariants yahan se hata dein kyunke productId baad mein aata hai
+            CustomizeGrid();
+            panelEdit.Visible = false;
+        }
+        public void SetProductDetails(int productId, string productName)
+        {
             _productId = productId;
             _productName = productName;
             lblProductName.Text = $"Managing Variants for: {productName}";
+
+            // Ab jab ID mil gayi hai, tab variants load karein
             LoadVariants();
-            CustomizeGrid();
-            panelEdit.Visible = false;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

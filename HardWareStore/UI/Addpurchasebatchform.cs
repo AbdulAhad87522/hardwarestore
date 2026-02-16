@@ -6,13 +6,14 @@ using System.Linq;
 using System.Windows.Forms;
 using HardWareStore.Models;
 using HardWareStore.DL;
+using HardWareStore.Interfaces;
 
 namespace HardWareStore.UI
 {
     public partial class AddPurchaseBatchForm : Form
     {
-        private readonly PurchaseBatchDL _batchDL = new PurchaseBatchDL();
-        private readonly ProductsDL _productsDL = new ProductsDL();
+        private readonly IPurchaseBatchDL _batchDL;
+        private readonly IProductsDL _productsDL;
 
         private int _currentBatchId = 0;
         private int _selectedVariantId = 0;
@@ -21,10 +22,12 @@ namespace HardWareStore.UI
         private int _editingItemIndex = -1;
         private bool _isEditingItem = false;
 
-        public AddPurchaseBatchForm()
+        public AddPurchaseBatchForm(IProductsDL productsDL,IPurchaseBatchDL batchDL)
         {
             InitializeComponent();
             panelVariantSelection.Visible = false;
+            _batchDL = batchDL;
+            _productsDL = productsDL;
             InitializeForm();
         }
 
@@ -587,6 +590,11 @@ namespace HardWareStore.UI
         private void cmbSupplier_TextChanged(object sender, EventArgs e)
         {
             _ = BindSuppliers(cmbSupplier.Text);
+        }
+
+        private void AddPurchaseBatchForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
