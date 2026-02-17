@@ -154,7 +154,8 @@ namespace MedicineShop
 
         private void btnsale_Click(object sender, EventArgs e)
         {
-           
+            var f = new Customersale();
+            LoadFormIntoPanel(f);
         }
         private void ExpandPanel(Panel panel, int expandedHeight)
         {
@@ -211,7 +212,7 @@ namespace MedicineShop
         private void btnsuppliers_Click(object sender, EventArgs e)
         {
          
-       
+            
         }
 
         private void iconButton2_Click(object sender, EventArgs e)
@@ -222,13 +223,15 @@ namespace MedicineShop
 
         private void iconButton3_Click(object sender, EventArgs e)
         {
-    
+            var f = Program.ServiceProvider.GetRequiredService<customerbillui>();
+            LoadFormIntoPanel(f);
 
         }
 
         private void iconButton4_Click(object sender, EventArgs e)
         {
-          
+            var f = Program.ServiceProvider.GetRequiredService<Customermain>();
+            LoadFormIntoPanel(f);
         }
         private void Dashboard_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -236,6 +239,14 @@ namespace MedicineShop
 
         private void iconButton5_Click(object sender, EventArgs e)
         {
+            var f = Program.ServiceProvider.GetRequiredService<CustomerReturns>();
+            LoadFormIntoPanel(f);
+        }
+
+        private void iconButton6_Click(object sender, EventArgs e)
+        {
+            var f = new Quotaion();
+            LoadFormIntoPanel(f);
         }
     }
 }

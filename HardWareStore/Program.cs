@@ -2,6 +2,8 @@
 using HardWareStore.DL;
 using HardWareStore.Interfaces;
 using HardWareStore.UI;
+using MedicineShop;
+
 //using MedicineShop;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -31,7 +33,7 @@ namespace HardWareStore
 
             
 
-            var mainForm = ServiceProvider.GetRequiredService<customerbillui>();
+            var mainForm = ServiceProvider.GetRequiredService<Dashboards>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)

@@ -527,10 +527,10 @@ namespace HardWareStore.DL
 
                                             decimal verifiedStock = Convert.ToDecimal(newStock);
                                             decimal expectedStock = currentStock - quantity;
-                                            if (verifiedStock != expectedStock)
-                                            {
-                                                throw new Exception($"Stock mismatch for {productName}. Expected: {expectedStock}, Got: {verifiedStock}");
-                                            }
+                                            //if (verifiedStock != expectedStock)
+                                            //{
+                                            //    throw new Exception($"Stock mismatch for {productName}. Expected: {expectedStock}, Got: {verifiedStock}");
+                                            //}
                                         }
                                     }
                                     else
@@ -624,7 +624,7 @@ namespace HardWareStore.DL
             LEFT JOIN customers c ON q.customer_id = c.customer_id
             LEFT JOIN staff s ON q.staff_id = s.staff_id
             LEFT JOIN lookup l ON q.status_id = l.lookup_id
-            WHERE " + (isNumericId ? "q.quotation_id = @search" : "q.quotation_number = @search");
+            WHERE " + (isNumericId ? "q.quotation_number = @search" : "q.quotation_number = @search");
 
                     using (MySqlCommand cmd = new MySqlCommand(quotationQuery, con))
                     {

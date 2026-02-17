@@ -51,6 +51,7 @@
             this.iconButton4 = new FontAwesome.Sharp.IconButton();
             this.iconButton5 = new FontAwesome.Sharp.IconButton();
             this.panel10 = new System.Windows.Forms.Panel();
+            this.iconButton6 = new FontAwesome.Sharp.IconButton();
             this.panelmenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelinventory.SuspendLayout();
@@ -75,18 +76,21 @@
             this.panelmenu.Controls.Add(this.iconButton3);
             this.panelmenu.Controls.Add(this.iconButton4);
             this.panelmenu.Controls.Add(this.iconButton5);
+            this.panelmenu.Controls.Add(this.iconButton6);
             this.panelmenu.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelmenu.Location = new System.Drawing.Point(0, 0);
+            this.panelmenu.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelmenu.Name = "panelmenu";
-            this.panelmenu.Size = new System.Drawing.Size(270, 1010);
+            this.panelmenu.Size = new System.Drawing.Size(303, 1170);
             this.panelmenu.TabIndex = 14;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Location = new System.Drawing.Point(3, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(265, 144);
+            this.pictureBox1.Size = new System.Drawing.Size(298, 180);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -106,9 +110,10 @@
             this.btndashboard.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btndashboard.IconSize = 40;
             this.btndashboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btndashboard.Location = new System.Drawing.Point(3, 153);
+            this.btndashboard.Location = new System.Drawing.Point(3, 192);
+            this.btndashboard.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btndashboard.Name = "btndashboard";
-            this.btndashboard.Size = new System.Drawing.Size(267, 60);
+            this.btndashboard.Size = new System.Drawing.Size(300, 75);
             this.btndashboard.TabIndex = 1;
             this.btndashboard.Text = "DashBoard";
             this.btndashboard.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -122,9 +127,10 @@
             this.panelinventory.Controls.Add(this.iconPictureBox1);
             this.panelinventory.Controls.Add(this.btnrecord);
             this.panelinventory.Controls.Add(this.btninventory);
-            this.panelinventory.Location = new System.Drawing.Point(3, 219);
+            this.panelinventory.Location = new System.Drawing.Point(3, 275);
+            this.panelinventory.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelinventory.Name = "panelinventory";
-            this.panelinventory.Size = new System.Drawing.Size(270, 63);
+            this.panelinventory.Size = new System.Drawing.Size(304, 79);
             this.panelinventory.TabIndex = 10;
             // 
             // iconPictureBox1
@@ -134,9 +140,11 @@
             this.iconPictureBox1.IconChar = FontAwesome.Sharp.IconChar.Neuter;
             this.iconPictureBox1.IconColor = System.Drawing.SystemColors.Control;
             this.iconPictureBox1.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconPictureBox1.Location = new System.Drawing.Point(204, 13);
+            this.iconPictureBox1.IconSize = 36;
+            this.iconPictureBox1.Location = new System.Drawing.Point(230, 16);
+            this.iconPictureBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconPictureBox1.Name = "iconPictureBox1";
-            this.iconPictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.iconPictureBox1.Size = new System.Drawing.Size(36, 40);
             this.iconPictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.iconPictureBox1.TabIndex = 8;
             this.iconPictureBox1.TabStop = false;
@@ -158,9 +166,10 @@
             this.btnrecord.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnrecord.IconSize = 40;
             this.btnrecord.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnrecord.Location = new System.Drawing.Point(0, 60);
+            this.btnrecord.Location = new System.Drawing.Point(0, 75);
+            this.btnrecord.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnrecord.Name = "btnrecord";
-            this.btnrecord.Size = new System.Drawing.Size(270, 62);
+            this.btnrecord.Size = new System.Drawing.Size(304, 78);
             this.btnrecord.TabIndex = 4;
             this.btnrecord.Text = "Add Category";
             this.btnrecord.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -185,8 +194,9 @@
             this.btninventory.IconSize = 40;
             this.btninventory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btninventory.Location = new System.Drawing.Point(0, 0);
+            this.btninventory.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btninventory.Name = "btninventory";
-            this.btninventory.Size = new System.Drawing.Size(270, 60);
+            this.btninventory.Size = new System.Drawing.Size(304, 75);
             this.btninventory.TabIndex = 3;
             this.btninventory.Text = "Inventory";
             this.btninventory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -200,9 +210,10 @@
             this.panelbatch.Controls.Add(this.iconPictureBox2);
             this.panelbatch.Controls.Add(this.btnbatchdetails);
             this.panelbatch.Controls.Add(this.btnbatches);
-            this.panelbatch.Location = new System.Drawing.Point(3, 288);
+            this.panelbatch.Location = new System.Drawing.Point(3, 362);
+            this.panelbatch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelbatch.Name = "panelbatch";
-            this.panelbatch.Size = new System.Drawing.Size(270, 66);
+            this.panelbatch.Size = new System.Drawing.Size(304, 82);
             this.panelbatch.TabIndex = 11;
             // 
             // iconPictureBox2
@@ -212,9 +223,11 @@
             this.iconPictureBox2.IconChar = FontAwesome.Sharp.IconChar.Neuter;
             this.iconPictureBox2.IconColor = System.Drawing.SystemColors.Control;
             this.iconPictureBox2.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.iconPictureBox2.Location = new System.Drawing.Point(204, 20);
+            this.iconPictureBox2.IconSize = 36;
+            this.iconPictureBox2.Location = new System.Drawing.Point(230, 25);
+            this.iconPictureBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconPictureBox2.Name = "iconPictureBox2";
-            this.iconPictureBox2.Size = new System.Drawing.Size(32, 32);
+            this.iconPictureBox2.Size = new System.Drawing.Size(36, 40);
             this.iconPictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.iconPictureBox2.TabIndex = 9;
             this.iconPictureBox2.TabStop = false;
@@ -236,9 +249,10 @@
             this.btnbatchdetails.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnbatchdetails.IconSize = 40;
             this.btnbatchdetails.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnbatchdetails.Location = new System.Drawing.Point(0, 61);
+            this.btnbatchdetails.Location = new System.Drawing.Point(0, 76);
+            this.btnbatchdetails.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnbatchdetails.Name = "btnbatchdetails";
-            this.btnbatchdetails.Size = new System.Drawing.Size(270, 60);
+            this.btnbatchdetails.Size = new System.Drawing.Size(304, 75);
             this.btnbatchdetails.TabIndex = 4;
             this.btnbatchdetails.Text = "Add Batch Details";
             this.btnbatchdetails.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -263,8 +277,9 @@
             this.btnbatches.IconSize = 40;
             this.btnbatches.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnbatches.Location = new System.Drawing.Point(0, 0);
+            this.btnbatches.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnbatches.Name = "btnbatches";
-            this.btnbatches.Size = new System.Drawing.Size(270, 61);
+            this.btnbatches.Size = new System.Drawing.Size(304, 76);
             this.btnbatches.TabIndex = 3;
             this.btnbatches.Text = "Batches";
             this.btnbatches.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -278,9 +293,10 @@
             this.panel4.Controls.Add(this.iconButton1);
             this.panel4.Controls.Add(this.iconButton8);
             this.panel4.Controls.Add(this.btnsale);
-            this.panel4.Location = new System.Drawing.Point(3, 360);
+            this.panel4.Location = new System.Drawing.Point(3, 452);
+            this.panel4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(270, 61);
+            this.panel4.Size = new System.Drawing.Size(304, 76);
             this.panel4.TabIndex = 12;
             // 
             // iconButton1
@@ -299,9 +315,10 @@
             this.iconButton1.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton1.IconSize = 40;
             this.iconButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton1.Location = new System.Drawing.Point(0, 120);
+            this.iconButton1.Location = new System.Drawing.Point(0, 150);
+            this.iconButton1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton1.Name = "iconButton1";
-            this.iconButton1.Size = new System.Drawing.Size(270, 10);
+            this.iconButton1.Size = new System.Drawing.Size(304, 12);
             this.iconButton1.TabIndex = 5;
             this.iconButton1.Text = "Add Details";
             this.iconButton1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -324,9 +341,10 @@
             this.iconButton8.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton8.IconSize = 40;
             this.iconButton8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton8.Location = new System.Drawing.Point(0, 60);
+            this.iconButton8.Location = new System.Drawing.Point(0, 75);
+            this.iconButton8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton8.Name = "iconButton8";
-            this.iconButton8.Size = new System.Drawing.Size(270, 60);
+            this.iconButton8.Size = new System.Drawing.Size(304, 75);
             this.iconButton8.TabIndex = 4;
             this.iconButton8.Text = "Batch Details";
             this.iconButton8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -350,8 +368,9 @@
             this.btnsale.IconSize = 40;
             this.btnsale.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnsale.Location = new System.Drawing.Point(0, 0);
+            this.btnsale.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnsale.Name = "btnsale";
-            this.btnsale.Size = new System.Drawing.Size(270, 60);
+            this.btnsale.Size = new System.Drawing.Size(304, 75);
             this.btnsale.TabIndex = 3;
             this.btnsale.Text = "Sell Product";
             this.btnsale.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -364,9 +383,10 @@
             this.panelsupp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(64)))), ((int)(((byte)(31)))));
             this.panelsupp.Controls.Add(this.btnSbills);
             this.panelsupp.Controls.Add(this.btnsuppliers);
-            this.panelsupp.Location = new System.Drawing.Point(3, 427);
+            this.panelsupp.Location = new System.Drawing.Point(3, 536);
+            this.panelsupp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelsupp.Name = "panelsupp";
-            this.panelsupp.Size = new System.Drawing.Size(270, 64);
+            this.panelsupp.Size = new System.Drawing.Size(304, 80);
             this.panelsupp.TabIndex = 13;
             // 
             // btnSbills
@@ -385,9 +405,10 @@
             this.btnSbills.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnSbills.IconSize = 40;
             this.btnSbills.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSbills.Location = new System.Drawing.Point(0, 60);
+            this.btnSbills.Location = new System.Drawing.Point(0, 75);
+            this.btnSbills.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSbills.Name = "btnSbills";
-            this.btnSbills.Size = new System.Drawing.Size(270, 60);
+            this.btnSbills.Size = new System.Drawing.Size(304, 75);
             this.btnSbills.TabIndex = 4;
             this.btnSbills.Text = "Supplier Bills";
             this.btnSbills.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -411,8 +432,9 @@
             this.btnsuppliers.IconSize = 40;
             this.btnsuppliers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnsuppliers.Location = new System.Drawing.Point(0, 0);
+            this.btnsuppliers.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnsuppliers.Name = "btnsuppliers";
-            this.btnsuppliers.Size = new System.Drawing.Size(270, 60);
+            this.btnsuppliers.Size = new System.Drawing.Size(304, 75);
             this.btnsuppliers.TabIndex = 3;
             this.btnsuppliers.Text = "Suppliers";
             this.btnsuppliers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -436,9 +458,10 @@
             this.iconButton2.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton2.IconSize = 40;
             this.iconButton2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton2.Location = new System.Drawing.Point(3, 497);
+            this.iconButton2.Location = new System.Drawing.Point(3, 624);
+            this.iconButton2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton2.Name = "iconButton2";
-            this.iconButton2.Size = new System.Drawing.Size(270, 60);
+            this.iconButton2.Size = new System.Drawing.Size(304, 75);
             this.iconButton2.TabIndex = 14;
             this.iconButton2.Text = "Supplier Bills";
             this.iconButton2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -462,9 +485,10 @@
             this.iconButton3.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton3.IconSize = 40;
             this.iconButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton3.Location = new System.Drawing.Point(3, 563);
+            this.iconButton3.Location = new System.Drawing.Point(3, 707);
+            this.iconButton3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton3.Name = "iconButton3";
-            this.iconButton3.Size = new System.Drawing.Size(270, 60);
+            this.iconButton3.Size = new System.Drawing.Size(304, 75);
             this.iconButton3.TabIndex = 15;
             this.iconButton3.Text = "Customer Bills";
             this.iconButton3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -488,9 +512,10 @@
             this.iconButton4.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton4.IconSize = 40;
             this.iconButton4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton4.Location = new System.Drawing.Point(3, 629);
+            this.iconButton4.Location = new System.Drawing.Point(3, 790);
+            this.iconButton4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton4.Name = "iconButton4";
-            this.iconButton4.Size = new System.Drawing.Size(270, 60);
+            this.iconButton4.Size = new System.Drawing.Size(304, 75);
             this.iconButton4.TabIndex = 16;
             this.iconButton4.Text = "Customers";
             this.iconButton4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -514,9 +539,10 @@
             this.iconButton5.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.iconButton5.IconSize = 40;
             this.iconButton5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.iconButton5.Location = new System.Drawing.Point(3, 695);
+            this.iconButton5.Location = new System.Drawing.Point(3, 873);
+            this.iconButton5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.iconButton5.Name = "iconButton5";
-            this.iconButton5.Size = new System.Drawing.Size(270, 60);
+            this.iconButton5.Size = new System.Drawing.Size(304, 75);
             this.iconButton5.TabIndex = 17;
             this.iconButton5.Text = "Return Items";
             this.iconButton5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -528,19 +554,48 @@
             // 
             this.panel10.BackColor = System.Drawing.Color.Linen;
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel10.Location = new System.Drawing.Point(270, 0);
+            this.panel10.Location = new System.Drawing.Point(303, 0);
+            this.panel10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1042, 1010);
+            this.panel10.Size = new System.Drawing.Size(1173, 1170);
             this.panel10.TabIndex = 15;
             // 
-            // Dashboard
+            // iconButton6
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.iconButton6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
+            this.iconButton6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.iconButton6.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.iconButton6.FlatAppearance.BorderSize = 2;
+            this.iconButton6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(64)))), ((int)(((byte)(31)))));
+            this.iconButton6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(64)))), ((int)(((byte)(31)))));
+            this.iconButton6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.iconButton6.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iconButton6.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.iconButton6.IconChar = FontAwesome.Sharp.IconChar.Trash;
+            this.iconButton6.IconColor = System.Drawing.Color.White;
+            this.iconButton6.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconButton6.IconSize = 40;
+            this.iconButton6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton6.Location = new System.Drawing.Point(3, 956);
+            this.iconButton6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.iconButton6.Name = "iconButton6";
+            this.iconButton6.Size = new System.Drawing.Size(304, 75);
+            this.iconButton6.TabIndex = 18;
+            this.iconButton6.Text = "Quotations";
+            this.iconButton6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.iconButton6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.iconButton6.UseVisualStyleBackColor = false;
+            this.iconButton6.Click += new System.EventHandler(this.iconButton6_Click);
+            // 
+            // Dashboards
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1312, 1010);
+            this.ClientSize = new System.Drawing.Size(1476, 1170);
             this.Controls.Add(this.panel10);
             this.Controls.Add(this.panelmenu);
-            this.Name = "Dashboard";
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Name = "Dashboards";
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -581,6 +636,7 @@
         private FontAwesome.Sharp.IconButton iconButton4;
         private FontAwesome.Sharp.IconPictureBox iconPictureBox2;
         private FontAwesome.Sharp.IconButton iconButton5;
+        private FontAwesome.Sharp.IconButton iconButton6;
     }
 }
 

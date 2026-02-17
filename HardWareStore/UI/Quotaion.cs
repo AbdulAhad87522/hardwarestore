@@ -601,20 +601,20 @@ namespace HardWareStore.UI
                     return;
                 }
 
-                if (string.IsNullOrEmpty(txtpaidamount.Text))
-                {
-                    MessageBox.Show("please enter some amount.");
-                    return;
-                }
+                //if (string.IsNullOrEmpty(txtpaidamount.Text))
+                //{
+                //    MessageBox.Show("please enter some amount.");
+                //    return;
+                //}
 
                 decimal paid = decimal.Parse(txtpaidamount.Text.Trim());
                 decimal finalprice = decimal.Parse(txtfinalprice.Text.Trim());
 
-                if (walking_in.Checked && (finalprice != paid))
-                {
-                    MessageBox.Show("Walkin customers should pay full amount");
-                    return;
-                }
+                //if (walking_in.Checked && (finalprice != paid))
+                //{
+                //    MessageBox.Show("Walkin customers should pay full amount");
+                //    return;
+                //}
 
                 if (dataGridView1.Rows.Count == 0)
                 {

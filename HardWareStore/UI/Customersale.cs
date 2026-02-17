@@ -747,7 +747,7 @@ namespace HardWareStore.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error in saving the data to database: " + ex.Message);
+                MessageBox.Show("Error in saving the data to database: " + ex.InnerException);
             }
         }
 
@@ -758,7 +758,6 @@ namespace HardWareStore.UI
                 return result;
             return defaultValue;
         }
-
 
         private void SavehthermalPdfInvoice()
         {
