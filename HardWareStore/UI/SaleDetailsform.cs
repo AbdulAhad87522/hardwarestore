@@ -164,15 +164,15 @@ namespace HardWareStore.UI
                         {
                             while (reader.Read())
                             {
-                                string productName = $"{reader.GetString("name")} - {reader.GetString("company_name")}";
+                                string productName = $"{reader.GetString("name")} - {reader.GetString("supplier_name")}";
 
                                 items.Add(new SaleItemInfo
                                 {
                                     //SaleItemId = reader.GetInt32("sale_item_id"),
                                     ProductName = productName,
                                     Quantity = reader.GetInt32("quantity"),
-                                    Price = reader.GetDecimal("price"),
-                                    Discount = reader.GetDecimal("discount"),
+                                    Price = reader.GetDecimal("unit_price"),
+                                    //Discount = reader.GetDecimal("discount"),
                                 });
                             }
                         }
@@ -316,7 +316,7 @@ namespace HardWareStore.UI
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 try
                 {

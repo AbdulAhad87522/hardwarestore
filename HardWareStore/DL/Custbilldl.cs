@@ -113,12 +113,12 @@ namespace HardWareStore.DL
                     conn.Open();
                     tran = conn.BeginTransaction();
 
-                    // 1. Fetch unpaid sales FIRST
+                    // 1. Fetch unpaid bills
                     string selectQuery = @"SELECT bill_id, total_amount, amount_paid
-                                   FROM bills
-                                   WHERE customer_id = @customerid 
-                                   AND (total_amount - amount_paid) > 0
-                                   ORDER BY bill_date ASC, bill_id ASC";
+                               FROM bills
+                               WHERE customer_id = @customerid 
+                               AND (total_amount - amount_paid) > 0
+                               ORDER BY bill_date ASC, bill_id ASC";
 
                     var sales = new List<(int id, decimal total, decimal paid)>();
                     using (var cmd = new MySqlCommand(selectQuery, conn, tran))
@@ -129,7 +129,7 @@ namespace HardWareStore.DL
                             while (reader.Read())
                             {
                                 sales.Add((
-                                    reader.GetInt32("sale_id"),
+                                    reader.GetInt32("bill_id"),      // ✅ Bug 1 fixed
                                     reader.GetDecimal("total_amount"),
                                     reader.GetDecimal("amount_paid")
                                 ));
@@ -139,7 +139,7 @@ namespace HardWareStore.DL
 
                     decimal remainingPayment = paymentAmount;
 
-                    // 2. Distribute payment to sales and record each payment
+                    // 2. Distribute payment across bills
                     foreach (var sale in sales)
                     {
                         if (remainingPayment <= 0) break;
@@ -149,10 +149,10 @@ namespace HardWareStore.DL
 
                         if (toPay > 0)
                         {
-                            // Update sale paid amount
+                            // Update bill paid amount
                             string updateQuery = @"UPDATE bills 
-                                           SET amount_paid = amount_piad + @toPay 
-                                           WHERE bill_id = @sale_id";
+                                   SET amount_paid = amount_paid + @toPay  
+                                   WHERE bill_id = @sale_id";          // ✅ Bug 2 fixed
                             using (var updateCmd = new MySqlCommand(updateQuery, conn, tran))
                             {
                                 updateCmd.Parameters.AddWithValue("@toPay", toPay);
@@ -160,17 +160,17 @@ namespace HardWareStore.DL
                                 updateCmd.ExecuteNonQuery();
                             }
 
-                            // Record the payment for this specific sale
+                            // Record payment
                             string insertPayment = @"INSERT INTO customerpricerecord 
-                                           (customer_id, sale_id, date, payment, remarks) 
-                                           VALUES (@customerid, @saleid, @date, @amount, @remarks)";
+                                   (customer_id, bill_id, date, payment, remarks)  
+                                   VALUES (@customerid, @saleid, @date, @amount, @remarks)"; // ✅ Bug 4 fixed
                             using (var cmdInsert = new MySqlCommand(insertPayment, conn, tran))
                             {
                                 cmdInsert.Parameters.AddWithValue("@customerid", customerid);
                                 cmdInsert.Parameters.AddWithValue("@saleid", sale.id);
                                 cmdInsert.Parameters.AddWithValue("@date", DateTime.Now);
                                 cmdInsert.Parameters.AddWithValue("@amount", toPay);
-                                cmdInsert.Parameters.AddWithValue("@remarks", $"Payment applied to sale #{sale.id}");
+                                cmdInsert.Parameters.AddWithValue("@remarks", $"Payment applied to bill #{sale.id}");
                                 cmdInsert.ExecuteNonQuery();
                             }
 
@@ -178,16 +178,16 @@ namespace HardWareStore.DL
                         }
                     }
 
-                    // 3. Handle any overpayment (create a credit record)
+                    // 3. Handle overpayment as credit
                     if (remainingPayment > 0)
                     {
                         string overpaymentQuery = @"INSERT INTO customerpricerecord 
-                                          (customer_id, sale_id, date, payment, remarks) 
-                                          VALUES (@customerid, 0, @date, @amount, @remarks)";
+                                  (customer_id, bill_id, date, payment, remarks) 
+                                  VALUES (@customerid, @billid, @date, @amount, @remarks)";
                         using (var overCmd = new MySqlCommand(overpaymentQuery, conn, tran))
                         {
                             overCmd.Parameters.AddWithValue("@customerid", customerid);
-                            overCmd.Parameters.AddWithValue("@saleid", 0); // 0 indicates credit
+                            overCmd.Parameters.AddWithValue("@billid", DBNull.Value); // ✅ Bug 3 fixed
                             overCmd.Parameters.AddWithValue("@date", DateTime.Now);
                             overCmd.Parameters.AddWithValue("@amount", remainingPayment);
                             overCmd.Parameters.AddWithValue("@remarks", "Credit balance");
@@ -205,7 +205,6 @@ namespace HardWareStore.DL
                 throw new Exception("Error adding customer payment", ex);
             }
         }
-
         public List<custPaymentRecord> GetCustomerPaymentRecords(int companyId)
         {
             var records = new List<custPaymentRecord>();

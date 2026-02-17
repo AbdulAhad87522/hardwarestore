@@ -555,6 +555,25 @@ namespace HardWareStore.DL
                             }
                         }
 
+                        if (customerId.HasValue && customerId.Value != 1)
+                        {
+                            string priceRecordQuery = @"INSERT INTO customerpricerecord 
+                                (customer_id, bill_id, date, payment, remarks)
+                                VALUES 
+                                (@customer_id, @bill_id, @date, @payment, @remarks)";
+
+                            using (MySqlCommand priceCmd = new MySqlCommand(priceRecordQuery, con, tran))
+                            {
+                                priceCmd.Parameters.AddWithValue("@customer_id", customerId.Value);
+                                priceCmd.Parameters.AddWithValue("@bill_id", billId);
+                                priceCmd.Parameters.AddWithValue("@date", date ?? DateTime.Now);
+                                priceCmd.Parameters.AddWithValue("@payment", paid_amount ?? 0);
+                                priceCmd.Parameters.AddWithValue("@remarks",
+                                    $"Bill: {billNumber} | Total: Rs. {total_amount:N2} | Paid: Rs. {paid_amount:N2} | Due: Rs. {amountDue:N2}");
+                                priceCmd.ExecuteNonQuery();
+                            }
+                        }
+
                         tran.Commit();
                         return true;
                     }
@@ -590,8 +609,8 @@ namespace HardWareStore.DL
                 q.quotation_number,
                 q.quotation_date,
                 q.customer_id,
-                c.name AS customer_name,
-                c.contact AS customer_contact,
+                c.full_name AS customer_name,
+                c.phone AS customer_contact, 
                 q.staff_id,
                 s.name AS staff_name,
                 q.subtotal,
@@ -602,7 +621,7 @@ namespace HardWareStore.DL
                 q.valid_until,
                 q.notes
             FROM quotations q
-            LEFT JOIN customer c ON q.customer_id = c.customer_id
+            LEFT JOIN customers c ON q.customer_id = c.customer_id
             LEFT JOIN staff s ON q.staff_id = s.staff_id
             LEFT JOIN lookup l ON q.status_id = l.lookup_id
             WHERE " + (isNumericId ? "q.quotation_id = @search" : "q.quotation_number = @search");

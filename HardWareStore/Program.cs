@@ -30,7 +30,7 @@ namespace HardWareStore
             ServiceProvider = services.BuildServiceProvider();
 
             
-            var mainForm = ServiceProvider.GetRequiredService<Customersale>();
+            var mainForm = ServiceProvider.GetRequiredService<customerbillui>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)
