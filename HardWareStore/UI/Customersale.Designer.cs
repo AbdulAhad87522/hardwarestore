@@ -31,6 +31,15 @@ namespace HardWareStore.UI
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ProductName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UnitOfMeasure = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.category_type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sale_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.final = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtproductsearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -54,15 +63,6 @@ namespace HardWareStore.UI
             this.button1 = new System.Windows.Forms.Button();
             this.txtquotaion = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ProductName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UnitOfMeasure = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.category_type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sale_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.discount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.final = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -93,6 +93,79 @@ namespace HardWareStore.UI
             this.dataGridView1.Size = new System.Drawing.Size(1575, 494);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // ProductName
+            // 
+            this.ProductName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ProductName.DataPropertyName = "ProductName";
+            this.ProductName.HeaderText = "Product_name";
+            this.ProductName.MinimumWidth = 8;
+            this.ProductName.Name = "ProductName";
+            this.ProductName.ReadOnly = true;
+            // 
+            // size
+            // 
+            this.size.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.size.DataPropertyName = "Size";
+            this.size.HeaderText = "size";
+            this.size.MinimumWidth = 8;
+            this.size.Name = "size";
+            // 
+            // UnitOfMeasure
+            // 
+            this.UnitOfMeasure.DataPropertyName = "UnitOfMeasure";
+            this.UnitOfMeasure.HeaderText = "unit_of_measure";
+            this.UnitOfMeasure.MinimumWidth = 8;
+            this.UnitOfMeasure.Name = "UnitOfMeasure";
+            this.UnitOfMeasure.Width = 150;
+            // 
+            // category_type
+            // 
+            this.category_type.DataPropertyName = "category_type";
+            this.category_type.HeaderText = "category_type";
+            this.category_type.MinimumWidth = 8;
+            this.category_type.Name = "category_type";
+            this.category_type.Width = 150;
+            // 
+            // sale_price
+            // 
+            this.sale_price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.sale_price.DataPropertyName = "sale_price";
+            this.sale_price.HeaderText = "Unit Price";
+            this.sale_price.MinimumWidth = 8;
+            this.sale_price.Name = "sale_price";
+            // 
+            // quantity
+            // 
+            this.quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.quantity.DataPropertyName = "quantity";
+            this.quantity.HeaderText = "quantity";
+            this.quantity.MinimumWidth = 8;
+            this.quantity.Name = "quantity";
+            // 
+            // discount
+            // 
+            this.discount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.discount.DataPropertyName = "discount";
+            this.discount.HeaderText = "discount";
+            this.discount.MinimumWidth = 8;
+            this.discount.Name = "discount";
+            // 
+            // final
+            // 
+            this.final.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.final.DataPropertyName = "final";
+            this.final.HeaderText = "total";
+            this.final.MinimumWidth = 8;
+            this.final.Name = "final";
+            // 
+            // total
+            // 
+            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.total.DataPropertyName = "total";
+            this.total.HeaderText = "final";
+            this.total.MinimumWidth = 8;
+            this.total.Name = "total";
             // 
             // txtproductsearch
             // 
@@ -375,79 +448,6 @@ namespace HardWareStore.UI
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
-            // ProductName
-            // 
-            this.ProductName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ProductName.DataPropertyName = "ProductName";
-            this.ProductName.HeaderText = "Product_name";
-            this.ProductName.MinimumWidth = 8;
-            this.ProductName.Name = "ProductName";
-            this.ProductName.ReadOnly = true;
-            // 
-            // size
-            // 
-            this.size.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.size.DataPropertyName = "Size";
-            this.size.HeaderText = "size";
-            this.size.MinimumWidth = 8;
-            this.size.Name = "size";
-            // 
-            // UnitOfMeasure
-            // 
-            this.UnitOfMeasure.DataPropertyName = "UnitOfMeasure";
-            this.UnitOfMeasure.HeaderText = "unit_of_measure";
-            this.UnitOfMeasure.MinimumWidth = 8;
-            this.UnitOfMeasure.Name = "UnitOfMeasure";
-            this.UnitOfMeasure.Width = 150;
-            // 
-            // category_type
-            // 
-            this.category_type.DataPropertyName = "category_type";
-            this.category_type.HeaderText = "category_type";
-            this.category_type.MinimumWidth = 8;
-            this.category_type.Name = "category_type";
-            this.category_type.Width = 150;
-            // 
-            // sale_price
-            // 
-            this.sale_price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.sale_price.DataPropertyName = "sale_price";
-            this.sale_price.HeaderText = "Unit Price";
-            this.sale_price.MinimumWidth = 8;
-            this.sale_price.Name = "sale_price";
-            // 
-            // quantity
-            // 
-            this.quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.quantity.DataPropertyName = "quantity";
-            this.quantity.HeaderText = "quantity";
-            this.quantity.MinimumWidth = 8;
-            this.quantity.Name = "quantity";
-            // 
-            // discount
-            // 
-            this.discount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.discount.DataPropertyName = "discount";
-            this.discount.HeaderText = "discount";
-            this.discount.MinimumWidth = 8;
-            this.discount.Name = "discount";
-            // 
-            // final
-            // 
-            this.final.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.final.DataPropertyName = "final";
-            this.final.HeaderText = "total";
-            this.final.MinimumWidth = 8;
-            this.final.Name = "final";
-            // 
-            // total
-            // 
-            this.total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.total.DataPropertyName = "total";
-            this.total.HeaderText = "final";
-            this.total.MinimumWidth = 8;
-            this.total.Name = "total";
             // 
             // Customersale
             // 

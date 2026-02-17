@@ -23,9 +23,9 @@ namespace HardWareStore.DL
                     string query = @"SELECT b.customer_id, 
                                             c.full_name, 
                                             SUM(b.total_amount) AS total_amount, 
-                                            SUM(b.paid_amount) AS paid, 
-                                            (SUM(b.total_amount) - SUM(b.paid_amount)) AS remaining
-                                     FROM sales b
+                                            SUM(b.amount_paid) AS paid, 
+                                            (SUM(b.total_amount) - SUM(b.amount_paid)) AS remaining
+                                     FROM bills b
                                      JOIN customers c ON b.customer_id = c.customer_id
                                      WHERE c.full_name LIKE @search OR b.customer_id LIKE @search
                                      GROUP BY b.customer_id, c.full_name";
@@ -69,9 +69,9 @@ namespace HardWareStore.DL
                     string query = @"SELECT b.customer_id, 
                                             c.full_name, 
                                             SUM(b.total_amount) AS total_amount, 
-                                            SUM(b.paid_amount) AS paid, 
-                                            (SUM(b.total_amount) - SUM(b.paid_amount)) AS remaining
-                                     FROM sales b
+                                            SUM(b.amount_paid) AS paid, 
+                                            (SUM(b.total_amount) - SUM(b.amount_paid)) AS remaining
+                                     FROM bills b
                                      JOIN customers c ON b.customer_id = c.customer_id
                                      WHERE b.customer_id = @search
                                      GROUP BY b.customer_id, c.full_name";
@@ -114,11 +114,11 @@ namespace HardWareStore.DL
                     tran = conn.BeginTransaction();
 
                     // 1. Fetch unpaid sales FIRST
-                    string selectQuery = @"SELECT sale_id, total_amount, paid_amount
-                                   FROM sales
+                    string selectQuery = @"SELECT bill_id, total_amount, amount_paid
+                                   FROM bills
                                    WHERE customer_id = @customerid 
-                                   AND (total_amount - paid_amount) > 0
-                                   ORDER BY sale_date ASC, sale_id ASC";
+                                   AND (total_amount - amount_paid) > 0
+                                   ORDER BY bill_date ASC, bill_id ASC";
 
                     var sales = new List<(int id, decimal total, decimal paid)>();
                     using (var cmd = new MySqlCommand(selectQuery, conn, tran))
@@ -131,7 +131,7 @@ namespace HardWareStore.DL
                                 sales.Add((
                                     reader.GetInt32("sale_id"),
                                     reader.GetDecimal("total_amount"),
-                                    reader.GetDecimal("paid_amount")
+                                    reader.GetDecimal("amount_paid")
                                 ));
                             }
                         }
@@ -150,9 +150,9 @@ namespace HardWareStore.DL
                         if (toPay > 0)
                         {
                             // Update sale paid amount
-                            string updateQuery = @"UPDATE sales 
-                                           SET paid_amount = paid_amount + @toPay 
-                                           WHERE sale_id = @sale_id";
+                            string updateQuery = @"UPDATE bills 
+                                           SET amount_paid = amount_piad + @toPay 
+                                           WHERE bill_id = @sale_id";
                             using (var updateCmd = new MySqlCommand(updateQuery, conn, tran))
                             {
                                 updateCmd.Parameters.AddWithValue("@toPay", toPay);

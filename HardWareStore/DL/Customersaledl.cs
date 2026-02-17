@@ -544,7 +544,7 @@ namespace HardWareStore.DL
                         // Update customer balance if credit customer
                         if (customerId.HasValue && amountDue > 0)
                         {
-                            string updateBalanceQuery = @"UPDATE customer 
+                            string updateBalanceQuery = @"UPDATE customers
                                               SET current_balance = current_balance + @amount_due 
                                               WHERE customer_id = @customer_id";
                             using (MySqlCommand balanceCmd = new MySqlCommand(updateBalanceQuery, con, tran))

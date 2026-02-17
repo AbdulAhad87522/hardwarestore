@@ -98,12 +98,12 @@ namespace HardWareStore.UI
                     conn.Open();
                     string query = @"
                         SELECT 
-                            s.sale_id,
-                            s.sale_date,
+                            s.bill_id,
+                            s.bill_date,
                             s.total_amount,
-                            s.paid_amount,
+                            s.amount_paid,
                             c.full_name as customer_name
-                        FROM sales s
+                        FROM bill s
                         INNER JOIN customers c ON s.customer_id = c.customer_id
                         WHERE s.sale_id = @SaleId";
 
@@ -116,10 +116,10 @@ namespace HardWareStore.UI
                             {
                                 return new SaleHeaderInfo
                                 {
-                                    SaleId = reader.GetInt32("sale_id"),
-                                    SaleDate = reader.GetDateTime("sale_date"),
+                                    SaleId = reader.GetInt32("bill_id"),
+                                    SaleDate = reader.GetDateTime("bill_date"),
                                     TotalAmount = reader.GetDecimal("total_amount"),
-                                    PaidAmount = reader.GetDecimal("paid_amount"),
+                                    PaidAmount = reader.GetDecimal("amount_paid"),
                                     CustomerName = reader.GetString("customer_name")
                                 };
                             }
@@ -148,18 +148,14 @@ namespace HardWareStore.UI
     
                             s.product_id,
 	                        m.name,
-                            c.company_name,
-                            cat.category_name,
+                            c.name AS supplier_name,
                             s.quantity,
-                            s.price ,
-                            s.discount,    
-                            p.packing_name  
-                        FROM sale_items s
-                        JOIN medicines m ON s.product_id = m.product_id
-                        INNER JOIN company c ON m.company_id = c.company_id
-                        INNER JOIN categories cat ON m.category_id = cat.category_id
-                        INNER JOIN packing p ON m.packing_id = p.packing_id
-                        WHERE s.sale_id = @saleId";
+                            s.unit_price
+                           
+                        FROM bill_items s
+                        JOIN products m ON s.product_id = m.product_id
+                        INNER JOIN supplier c ON m.supplier_id = c.supplier_id
+                        WHERE s.bill_id = @saleId";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {

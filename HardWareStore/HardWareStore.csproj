@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BL\CompanyBL.cs" />
+    <Compile Include="BL\custbillbl.cs" />
     <Compile Include="BL\Customerbillbl.cs" />
     <Compile Include="BL\CustomerBl.cs" />
     <Compile Include="BL\internal class CustomerBill_SpecificProductsBL.cs" />
@@ -293,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CompanyMain.resx">
       <DependentUpon>CompanyMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\customerbillui.resx">
+      <DependentUpon>customerbillui.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Customersale.resx">
       <DependentUpon>Customersale.cs</DependentUpon>

@@ -107,19 +107,19 @@ namespace HardWareStore.UI
                     conn.Open();
                     string query = @"
                         SELECT DISTINCT
-                            s.sale_id,
-                            s.sale_date,
+                            s.bill_id,
+                            s.bill_date,
                             s.total_amount,
-                            s.paid_amount,
-                            (s.total_amount - s.paid_amount) as remaining_amount,
+                            s.amount_paid,
+                            (s.total_amount - s.amount_paid) as remaining_amount,
                             CASE 
-                                WHEN s.paid_amount >= s.total_amount THEN 'Paid'
-                                WHEN s.paid_amount > 0 THEN 'Partial'
+                                WHEN s.amount_paid >= s.total_amount THEN 'Paid'
+                                WHEN s.amount_paid > 0 THEN 'Partial'
                                 ELSE 'Unpaid'
                             END as status
-                        FROM sales s
+                        FROM bills s
                         WHERE s.customer_id = @CustomerId
-                        ORDER BY s.sale_date DESC";
+                        ORDER BY s.bill_date DESC";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
@@ -130,10 +130,10 @@ namespace HardWareStore.UI
                             {
                                 sales.Add(new CustomerSaleInfo
                                 {
-                                    SaleId = reader.GetInt32("sale_id"),
-                                    SaleDate = reader.GetDateTime("sale_date"),
+                                    SaleId = reader.GetInt32("bill_id"),
+                                    SaleDate = reader.GetDateTime("bill_date"),
                                     TotalAmount = reader.GetDecimal("total_amount"),
-                                    PaidAmount = reader.GetDecimal("paid_amount"),
+                                    PaidAmount = reader.GetDecimal("amount_paid"),
                                     RemainingAmount = reader.GetDecimal("remaining_amount"),
                                     Status = reader.GetString("status")
                                 });

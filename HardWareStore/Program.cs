@@ -1,4 +1,5 @@
-﻿using HardWareStore.DL;
+﻿using HardWareStore.BL;
+using HardWareStore.DL;
 using HardWareStore.Interfaces;
 using HardWareStore.UI;
 //using MedicineShop;
@@ -29,7 +30,7 @@ namespace HardWareStore
             ServiceProvider = services.BuildServiceProvider();
 
             
-            var mainForm = ServiceProvider.GetRequiredService<Quotaion>();
+            var mainForm = ServiceProvider.GetRequiredService<Customersale>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)
@@ -38,7 +39,9 @@ namespace HardWareStore
             services.AddScoped<IProductsDL, ProductsDL>();
             services.AddScoped<IVariantsDL, VariantsDL>();
             services.AddScoped<IInventoryDL, InventoryDL>();
-            //services.AddScoped<Icustomerbilldl, Customerbilldl>();
+            services.AddScoped<Icustomerbilldl, Custbilldl>();
+            services.AddScoped<Icustomerbillbl, custbillbl>();
+
 
 
             services.AddTransient<Dashboard>();

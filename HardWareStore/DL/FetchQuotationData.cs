@@ -178,7 +178,6 @@ namespace HardWareStore.DL
                         column.Item().AlignCenter().Text("Main bazar lahore").FontSize(12);
                         column.Item().AlignCenter().Text("Phone: 03021222005").FontSize(12);
                         column.Item().PaddingVertical(10).LineHorizontal(1);
-
                         column.Item().PaddingBottom(10).Row(row =>
                         {
                             row.RelativeItem().Column(infoCol =>

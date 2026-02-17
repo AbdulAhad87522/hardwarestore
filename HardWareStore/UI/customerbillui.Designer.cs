@@ -168,9 +168,7 @@
             this.panel2.TabIndex = 205;
             // 
             // pictureBox10
-            //// 
-            //this.pictureBox10.ErrorImage = global::MedicineShop.Properties.Resources.refresh;
-            //this.pictureBox10.Image = global::MedicineShop.Properties.Resources.refresh;
+            // 
             this.pictureBox10.Location = new System.Drawing.Point(14, 140);
             this.pictureBox10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBox10.Name = "pictureBox10";
@@ -345,8 +343,8 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Navy;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.OldLace;
             this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView2.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
@@ -386,6 +384,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1863, 105);
             this.panel1.TabIndex = 204;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // customerbillui
             // 
