@@ -586,5 +586,10 @@ namespace HardWareStore.UI
             // Write to file
             System.IO.File.WriteAllText(filePath, csv.ToString());
         }
+
+        private void mainPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

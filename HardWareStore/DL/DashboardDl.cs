@@ -67,7 +67,9 @@ namespace HardWareStore.DL
                     }
 
                     // Total Revenue & Bills
-                    string totalQuery = "SELECT COALESCE(SUM(total_amount), 0) as revenue, COUNT(*) as count FROM bills;";
+                    string totalQuery = @"
+                        SELECT COALESCE(SUM(total_amount), 0) as revenue, COUNT(*) as count 
+                        FROM bills;";
                     using (var cmd = new MySqlCommand(totalQuery, conn))
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -79,6 +81,7 @@ namespace HardWareStore.DL
                     }
 
                     // Pending Bills
+                    // ✅ lookup values are 'Pending' and 'Partial' (capital P)
                     string pendingQuery = @"
                         SELECT COUNT(*) as count 
                         FROM bills b
@@ -90,12 +93,14 @@ namespace HardWareStore.DL
                     }
 
                     // Customers
+                    // ✅ column is 'full_name' not 'name', no 'walkin' type
                     string customersQuery = @"
                         SELECT 
                             COUNT(*) as total,
                             SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active,
                             COALESCE(SUM(current_balance), 0) as outstanding
-                        FROM customer WHERE customer_type != 'walkin';";
+                        FROM customers
+                        WHERE customer_type != 'walkin';";
                     using (var cmd = new MySqlCommand(customersQuery, conn))
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -107,7 +112,7 @@ namespace HardWareStore.DL
                         }
                     }
 
-                    // Products & Stock
+                    // Products
                     string productsQuery = @"
                         SELECT COUNT(DISTINCT p.product_id) as total_products
                         FROM products p WHERE p.is_active = 1;";
@@ -116,9 +121,11 @@ namespace HardWareStore.DL
                         stats.TotalProducts = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
+                    // Stock
                     string stockQuery = @"
                         SELECT 
-                            SUM(CASE WHEN quantity_in_stock <= reorder_level AND quantity_in_stock > 0 THEN 1 ELSE 0 END) as low_stock,
+                            SUM(CASE WHEN quantity_in_stock <= reorder_level 
+                                     AND quantity_in_stock > 0 THEN 1 ELSE 0 END) as low_stock,
                             SUM(CASE WHEN quantity_in_stock = 0 THEN 1 ELSE 0 END) as out_of_stock,
                             COALESCE(SUM(quantity_in_stock * price_per_unit), 0) as stock_value
                         FROM product_variants WHERE is_active = 1;";
@@ -134,6 +141,7 @@ namespace HardWareStore.DL
                     }
 
                     // Suppliers
+                    // ✅ purchase_batches columns: total_price, paid, supplier_id
                     string suppliersQuery = @"
                         SELECT 
                             COUNT(DISTINCT s.supplier_id) as total,
@@ -154,11 +162,13 @@ namespace HardWareStore.DL
                     }
 
                     // Quotations
+                    // ✅ quotation_status values: Draft, Sent, Accepted, Rejected, Converted, Expired
+                    // 'Draft' is the equivalent of pending (newly created)
                     string quotationsQuery = @"
                         SELECT 
                             COUNT(*) as total,
-                            SUM(CASE WHEN l.value = 'Pending' THEN 1 ELSE 0 END) as pending,
-                            COALESCE(SUM(total_amount), 0) as value
+                            SUM(CASE WHEN l.value IN ('Draft', 'Sent') THEN 1 ELSE 0 END) as pending,
+                            COALESCE(SUM(q.total_amount), 0) as value
                         FROM quotations q
                         JOIN lookup l ON q.status_id = l.lookup_id;";
                     using (var cmd = new MySqlCommand(quotationsQuery, conn))
@@ -207,7 +217,7 @@ namespace HardWareStore.DL
                 FROM bill_items bi
                 JOIN products p ON bi.product_id = p.product_id
                 JOIN product_variants pv ON bi.variant_id = pv.variant_id
-                GROUP BY p.product_id, pv.variant_id
+                GROUP BY p.product_id, pv.variant_id, p.name, pv.size
                 ORDER BY Revenue DESC
                 LIMIT @limit;";
 
@@ -241,16 +251,17 @@ namespace HardWareStore.DL
         {
             var bills = new List<RecentBill>();
 
+            // ✅ customers column is 'full_name' not 'name'
             string query = @"
                 SELECT 
                     b.bill_number as BillNumber,
-                    COALESCE(c.name, 'Walk-in') as CustomerName,
+                    COALESCE(c.full_name, 'Walk-in') as CustomerName,
                     b.bill_date as BillDate,
                     b.total_amount as TotalAmount,
                     l.value as PaymentStatus,
                     b.amount_due as AmountDue
                 FROM bills b
-                LEFT JOIN customer c ON b.customer_id = c.customer_id
+                LEFT JOIN customers c ON b.customer_id = c.customer_id
                 JOIN lookup l ON b.payment_status_id = l.lookup_id
                 ORDER BY b.bill_date DESC
                 LIMIT @limit;";
@@ -403,29 +414,27 @@ namespace HardWareStore.DL
                 }
             });
 
-            // Calculate percentages
             if (totalSales > 0)
-            {
                 foreach (var cat in categories)
-                {
                     cat.Percentage = (double)(cat.TotalSales / totalSales * 100);
-                }
-            }
 
             return categories;
         }
 
+        // ✅ REPLACED GetPaymentMethodStats - bills table no longer has payment_method column
+        // Now groups by payment status instead
         public async Task<List<PaymentMethodStats>> GetPaymentMethodStats()
         {
             var methods = new List<PaymentMethodStats>();
 
             string query = @"
                 SELECT 
-                    payment_method as PaymentMethod,
+                    l.value as PaymentMethod,
                     COUNT(*) as Count,
-                    COALESCE(SUM(total_amount), 0) as Amount
-                FROM bills
-                GROUP BY payment_method
+                    COALESCE(SUM(b.total_amount), 0) as Amount
+                FROM bills b
+                JOIN lookup l ON b.payment_status_id = l.lookup_id
+                GROUP BY l.lookup_id, l.value
                 ORDER BY Amount DESC;";
 
             decimal totalAmount = 0;
@@ -450,14 +459,9 @@ namespace HardWareStore.DL
                 }
             });
 
-            // Calculate percentages
             if (totalAmount > 0)
-            {
                 foreach (var method in methods)
-                {
                     method.Percentage = (double)(method.Amount / totalAmount * 100);
-                }
-            }
 
             return methods;
         }

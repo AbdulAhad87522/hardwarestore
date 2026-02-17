@@ -117,8 +117,8 @@ namespace HardWareStore.UI
             {
                 Company company = new Company
                 {
-                    CompanyId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["company_id"].Value),
-                    CompanyName = dataGridView1.CurrentRow.Cells["company_name"].Value.ToString(),
+                    CompanyId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["supplier_id"].Value),
+                    CompanyName = dataGridView1.CurrentRow.Cells["name"].Value.ToString(),
                     Contact = dataGridView1.CurrentRow.Cells["contact"].Value.ToString(),
                     Address = dataGridView1.CurrentRow.Cells["address"].Value.ToString()
                 };
@@ -137,7 +137,7 @@ namespace HardWareStore.UI
         {
             if (dataGridView1.CurrentRow != null)
             {
-                int companyId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["company_id"].Value);
+                int companyId = Convert.ToInt32(dataGridView1.CurrentRow.Cells["supplier_id"].Value);
 
                 DialogResult confirm = MessageBox.Show(
                     "Are you sure you want to delete this company?",

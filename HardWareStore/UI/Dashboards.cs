@@ -211,8 +211,9 @@ namespace MedicineShop
 
         private void btnsuppliers_Click(object sender, EventArgs e)
         {
-         
-            
+            var f = Program.ServiceProvider.GetRequiredService<CompanyMain>();
+            LoadFormIntoPanel(f);
+
         }
 
         private void iconButton2_Click(object sender, EventArgs e)
@@ -247,6 +248,11 @@ namespace MedicineShop
         {
             var f = new Quotaion();
             LoadFormIntoPanel(f);
+        }
+
+        private void panel10_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
