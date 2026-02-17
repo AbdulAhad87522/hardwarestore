@@ -29,7 +29,7 @@ namespace HardWareStore
             ServiceProvider = services.BuildServiceProvider();
 
             
-            var mainForm = ServiceProvider.GetRequiredService<Dashboards>();
+            var mainForm = ServiceProvider.GetRequiredService<CustomerReturns>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)
@@ -38,6 +38,8 @@ namespace HardWareStore
             services.AddScoped<IProductsDL, ProductsDL>();
             services.AddScoped<IVariantsDL, VariantsDL>();
             services.AddScoped<IInventoryDL, InventoryDL>();
+            services.AddScoped<IReturnsDL, ReturnsDL>();
+            services.AddScoped<IBillsDL, BillsDL>();
             services.AddTransient<Dashboards>();
             services.AddTransient<InventoryMain>();
             services.AddTransient<ProductsMain>();
@@ -46,6 +48,7 @@ namespace HardWareStore
             services.AddTransient<SupplierBillDetailsForm>();
             services.AddTransient<SupplierBillsForm>();
             services.AddTransient<Dashboard>();
+            services.AddTransient<CustomerReturns>();
         }
     }
 }
