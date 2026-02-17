@@ -70,6 +70,44 @@ namespace HardWareStore.UI
         /// <summary>
         /// Adds hover effects to a button
         /// </summary>
+        /// 
+        public static void StyleGridView(DataGridView grid)
+        {
+            if (grid == null) return;
+
+            // General layout & restrictions
+            grid.BorderStyle = BorderStyle.None;
+            grid.BackgroundColor = Color.White;
+            grid.ReadOnly = true;
+            grid.AllowUserToAddRows = false;
+            grid.AllowUserToDeleteRows = false;
+            grid.AllowUserToResizeRows = false;
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            grid.MultiSelect = false;
+            grid.RowTemplate.Height = 35;
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // Alternating row style
+            grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(238, 239, 249);
+
+            // Cell borders & selection colors
+            grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            grid.DefaultCellStyle.SelectionBackColor = Color.SeaGreen;
+            grid.DefaultCellStyle.SelectionForeColor = Color.WhiteSmoke;
+
+            // Header styling
+            grid.EnableHeadersVisualStyles = false;
+            grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(20, 25, 72);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+
+            // Default cell font
+            grid.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+
+
+        }
+
         public static void AddButtonHoverEffect(Button button, Color hoverColor)
         {
             Color originalColor = button.BackColor;

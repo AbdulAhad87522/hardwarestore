@@ -1,7 +1,8 @@
-﻿using HardWareStore.DL;
+﻿using HardWareStore.BL;
+using HardWareStore.DL;
 using HardWareStore.Interfaces;
 using HardWareStore.UI;
-using MedicineShop;
+//using MedicineShop;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,8 @@ namespace HardWareStore
             ServiceProvider = services.BuildServiceProvider();
 
             
-            var mainForm = ServiceProvider.GetRequiredService<CustomerReturns>();
+
+            var mainForm = ServiceProvider.GetRequiredService<customerbillui>();
             Application.Run(mainForm);
         }
         private static void configureServices(ServiceCollection services)
@@ -41,9 +43,26 @@ namespace HardWareStore
             services.AddScoped<IReturnsDL, ReturnsDL>();
             services.AddScoped<IBillsDL, BillsDL>();
             services.AddTransient<Dashboards>();
+            services.AddScoped<Icustomerbilldl, Custbilldl>();
+            services.AddScoped<Icustomerbillbl, custbillbl>();
+
+
+
+            services.AddTransient<Dashboard>();
             services.AddTransient<InventoryMain>();
             services.AddTransient<ProductsMain>();
             services.AddTransient<VariantsMain>();
+            services.AddTransient<Customersale>();
+            services.AddTransient<Addcustomer>();
+            services.AddTransient<Quotaion>();
+            services.AddTransient<customerbillui>();
+            services.AddTransient<customerbillspecui>();
+            services.AddTransient<Customermain>();
+            services.AddTransient<AddCompany>();
+            services.AddTransient<CompanyMain>();
+
+
+
             services.AddTransient<AddPurchaseBatchForm>();
             services.AddTransient<SupplierBillDetailsForm>();
             services.AddTransient<SupplierBillsForm>();

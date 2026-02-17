@@ -9,24 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
-using FontAwesome.Sharp;
 using HardWareStore.BL;
 using HardWareStore.DL;
-using HardWareStore.Models;
 using Newtonsoft.Json;
 
 namespace HardWareStore.UI
 {
-    public partial class Customersale : Form
+    public partial class Quotaion : Form
     {
+
         private DataGridView dgvproductsearch = new DataGridView();
         private DataGridView dgvcustomersearch = new DataGridView();
         Customersaledl _customersaledl = new Customersaledl();
         private DataGridViewRow row;
         private int selectedRowIndex = -1;
-        public Customersale()
+        public Quotaion()
         {
             InitializeComponent();
             walking_in.Checked = true;
@@ -643,12 +640,12 @@ namespace HardWareStore.UI
                 decimal finalPrice = ConvertToDecimalSafe(txtfinalprice.Text);
 
 
-                bool result = _customersaledl.SaveDataToDatabase(
+                bool result = _customersaledl.SaveQuotationToDatabase(
                     id,
                     dateTimePicker1.Value,
                     //Convert.ToDecimal(txtfinaldiscount.Text),
                     Convert.ToDecimal(txtfinalprice.Text),
-                    Convert.ToDecimal(txtpaidamount.Text),
+                    //Convert.ToDecimal(txtpaidamount.Text),
                     dataGridView1
                 );
 
@@ -684,7 +681,7 @@ namespace HardWareStore.UI
                             try
                             {
                                 string customerName = string.IsNullOrEmpty(txtcustsearch.Text) ? "Walk-in Customer" : txtcustsearch.Text.Trim();
-                                Customersaledl.CreateA4ReceiptPdf(dataGridView1, saveDialog.FileName, customerName,
+                                FetchQuotationDataclass.CreateA4ReceiptPdf(dataGridView1, saveDialog.FileName, customerName,
                                     Convert.ToDecimal(txtfinalprice.Text), Convert.ToDecimal(txtpaidamount.Text),
                                     Convert.ToDecimal(txtfinaldiscount.Text));
 
@@ -920,119 +917,6 @@ namespace HardWareStore.UI
         private void iconButton2_Click(object sender, EventArgs e)
         {
 
-        }
-
-            private void txtquotaion_TextChanged(object sender, EventArgs e)
-            {
-                if (!string.IsNullOrWhiteSpace(txtquotaion.Text))
-                {
-                    button1.Enabled = true;
-                }
-                else
-                {
-                    button1.Enabled = false;
-                }
-            }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Validate input
-                if (string.IsNullOrWhiteSpace(txtquotaion.Text))
-                {
-                    MessageBox.Show("Please enter a quotation ID or number", "Validation Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Try to parse as ID (integer) first, otherwise search by quotation_number
-                int quotationId;
-                bool isNumericId = int.TryParse(txtquotaion.Text.Trim(), out quotationId);
-
-                // Fetch quotation data
-                var quotationData = Customersaledl.FetchQuotationData(txtquotaion.Text.Trim(), isNumericId);
-
-                if (quotationData == null)
-                {
-                    MessageBox.Show("Quotation not found", "Not Found",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                // Clear existing data and reset DataSource
-                dataGridView1.DataSource = null; // ✅ IMPORTANT: Remove any data binding
-                dataGridView1.Rows.Clear();
-
-                // Display the quotation data
-                DisplayQuotationData(quotationData);
-                // Add this temporarily to see all column names
-                //foreach (DataGridViewColumn col in dataGridView1.Columns)
-                //{
-                //    MessageBox.Show($"Name: {col.Name}, Header: {col.HeaderText}");
-                //}
-
-                // Populate totals
-                totalwithoutdisc.Text = quotationData.Subtotal.ToString("N2");
-                txtfinaldiscount.Text = quotationData.DiscountAmount.ToString("N2");
-                txtfinalprice.Text = quotationData.TotalAmount.ToString("N2");
-
-                MessageBox.Show($"Quotation loaded with {quotationData.Items.Count} items!", "Success",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error fetching quotation: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Diagnostics.Debug.WriteLine($"Error in button1_Click: {ex}");
-            }
-        }
-
-        private void DisplayQuotationData(QuotationData data)
-        {
-            try
-            {
-                // Make sure DataSource is null for manual row management
-                dataGridView1.DataSource = null;
-                dataGridView1.Rows.Clear();
-
-                foreach (var item in data.Items)
-                {
-                    // Create array matching your column order
-                    object[] rowData = new object[]
-                    {
-                item.ProductName,      // Column 0: product_name
-                item.Size,             // Column 1: size
-                item.UnitOfMeasure,    // Column 2: unit_of_measure
-                item.Category,         // Column 3: category_type
-                item.sale_price,        // Column 4: sale_price
-                item.Quantity,         // Column 5: quantity
-                0,                     // Column 6: discount (default 0)
-                item.final,        // Column 7: total
-                item.final         // Column 8: final
-                    };
-
-                    int rowIndex = dataGridView1.Rows.Add(rowData);
-
-                    // Store IDs in Tag
-                    dataGridView1.Rows[rowIndex].Tag = new
-                    {
-                        ProductId = item.ProductId,
-                        VariantId = item.VariantId
-                    };
-                }
-
-                // Recalculate totals
-                totalprice();
-
-                System.Diagnostics.Debug.WriteLine($"Successfully loaded {data.Items.Count} items into grid");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error displaying quotation data: {ex.Message}", "Display Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Diagnostics.Debug.WriteLine($"Error in DisplayQuotationData: {ex}");
-            }
         }
 
         //private void iconButton4_Click(object sender, EventArgs e)

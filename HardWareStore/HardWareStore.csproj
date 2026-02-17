@@ -38,9 +38,6 @@
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>packages\BouncyCastle.Cryptography.2.6.2\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Dapper.2.1.66\lib\net461\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="FontAwesome.Sharp, Version=6.6.0.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
       <HintPath>packages\FontAwesome.Sharp.6.6.0\lib\net472\FontAwesome.Sharp.dll</HintPath>
     </Reference>
@@ -119,41 +116,58 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL\CompanyBL.cs" />
+    <Compile Include="BL\custbillbl.cs" />
     <Compile Include="BL\Customerbillbl.cs" />
     <Compile Include="BL\CustomerBl.cs" />
     <Compile Include="BL\internal class CustomerBill_SpecificProductsBL.cs" />
     <Compile Include="BL\Temporarycustomersale.cs" />
     <Compile Include="DL\BillingRecordsOverviewDL.cs" />
+    <Compile Include="DL\CompanyDL.cs" />
+    <Compile Include="DL\Custbilldl.cs" />
     <Compile Include="DL\Customerbilldl.cs" />
     <Compile Include="DL\CustomerBill_SpecificProductsDL.cs" />
     <Compile Include="DL\Customerdl.cs" />
     <Compile Include="DL\Customersaledl.cs" />
     <Compile Include="DL\DashboardDl.cs" />
     <Compile Include="DL\DatabaseHelper.cs" />
+    <Compile Include="DL\FetchQuotationData.cs" />
     <Compile Include="DL\InventoryDl.cs" />
     <Compile Include="DL\MySqlBackupHelper.cs" />
     <Compile Include="DL\ProductsDL.cs" />
     <Compile Include="DL\Purchasebatchdl.cs" />
-    <Compile Include="DL\ReturnsDl.cs" />
     <Compile Include="DL\Supplierpaymentdl.cs" />
     <Compile Include="DL\VariantsDl.cs" />
+    <Compile Include="Interfaces\ICompanyDL.cs" />
+    <Compile Include="Interfaces\Icustomerbillbl.cs" />
+    <Compile Include="Interfaces\Icustomerbilldl.cs" />
     <Compile Include="Interfaces\IInventoryDL.cs" />
     <Compile Include="Interfaces\IProductsDL.cs" />
     <Compile Include="Interfaces\IPurchaseBatchDL.cs" />
     <Compile Include="Interfaces\IVariantsDL.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\custbill.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\customerbill.cs" />
     <Compile Include="Models\Customerrecord.cs" />
+    <Compile Include="Models\custPaymentRecord.cs" />
     <Compile Include="Models\DashboardStats.cs" />
     <Compile Include="Models\InventoryResponse.cs" />
     <Compile Include="Models\Products.cs" />
     <Compile Include="Models\PurchaseBatch.cs" />
     <Compile Include="Models\PurchaseBatchItem.cs" />
-    <Compile Include="Models\ReturnModel.cs" />
+    <Compile Include="Models\QuotationData.cs" />
+    <Compile Include="Models\QuotationItemData.cs" />
     <Compile Include="Models\SupplierPaymentRecord.cs" />
     <Compile Include="Models\Variants.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\AddCompany.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddCompany.Designer.cs">
+      <DependentUpon>AddCompany.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Addcustomer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,17 +186,35 @@
     <Compile Include="UI\BatchItemsForm.Designer.cs">
       <DependentUpon>BatchItemsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\CompanyMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CompanyMain.Designer.cs">
+      <DependentUpon>CompanyMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\customerbillspecui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customerbillspecui.Designer.cs">
+      <DependentUpon>customerbillspecui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\customerbillui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\customerbillui.Designer.cs">
+      <DependentUpon>customerbillui.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\CustomerBill_SpecificProducts.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\CustomerBill_SpecificProducts.Designer.cs">
       <DependentUpon>CustomerBill_SpecificProducts.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\CustomerReturns.cs">
+    <Compile Include="UI\Customermain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\CustomerReturns.Designer.cs">
-      <DependentUpon>CustomerReturns.cs</DependentUpon>
+    <Compile Include="UI\Customermain.Designer.cs">
+      <DependentUpon>Customermain.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Customersale.cs">
       <SubType>Form</SubType>
@@ -202,18 +234,6 @@
     <Compile Include="UI\Dashboard.Designer.cs">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dashboards.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dashboards.Designer.cs">
-      <DependentUpon>Dashboards.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\HomeContentForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\HomeContentForm.Designer.cs">
-      <DependentUpon>HomeContentForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\InventoryMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -226,17 +246,17 @@
     <Compile Include="UI\ProductsMain.Designer.cs">
       <DependentUpon>ProductsMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Purchasebatchmanagementform.cs">
+    <Compile Include="UI\Quotaion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Purchasebatchmanagementform.Designer.cs">
-      <DependentUpon>Purchasebatchmanagementform.cs</DependentUpon>
+    <Compile Include="UI\Quotaion.Designer.cs">
+      <DependentUpon>Quotaion.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ReturnQtyModel.cs">
+    <Compile Include="UI\SaleDetailsform.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\ReturnQtyModel.Designer.cs">
-      <DependentUpon>ReturnQtyModel.cs</DependentUpon>
+    <Compile Include="UI\SaleDetailsform.Designer.cs">
+      <DependentUpon>SaleDetailsform.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Supplierbilldetailsform.cs">
       <SubType>Form</SubType>
@@ -272,26 +292,23 @@
     <EmbeddedResource Include="UI\BatchItemsForm.resx">
       <DependentUpon>BatchItemsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CustomerReturns.resx">
-      <DependentUpon>CustomerReturns.cs</DependentUpon>
+    <EmbeddedResource Include="UI\CompanyMain.resx">
+      <DependentUpon>CompanyMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\customerbillui.resx">
+      <DependentUpon>customerbillui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Customersale.resx">
+      <DependentUpon>Customersale.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Dashboards.resx">
-      <DependentUpon>Dashboards.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\HomeContentForm.resx">
-      <DependentUpon>HomeContentForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\InventoryMain.resx">
       <DependentUpon>InventoryMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\ProductsMain.resx">
-      <DependentUpon>ProductsMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Purchasebatchmanagementform.resx">
-      <DependentUpon>Purchasebatchmanagementform.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Quotaion.resx">
+      <DependentUpon>Quotaion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Supplierbilldetailsform.resx">
       <DependentUpon>Supplierbilldetailsform.cs</DependentUpon>
@@ -299,7 +316,6 @@
     <EmbeddedResource Include="UI\supplierbillsform.resx">
       <DependentUpon>supplierbillsform.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -314,9 +330,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Interfaces\IReturnDl.cs" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets" Condition="Exists('packages\QuestPDF.2025.7.1\build\net4\QuestPDF.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
